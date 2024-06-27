@@ -1,11 +1,10 @@
-package com.example.openglbase
+package com.example.openglbase.samples
 
 import com.example.openglbase.math.Quaternion
 import com.example.openglbase.math.Vector3
 import com.example.openglbase.scene.Node
 
-// TODO PGJ move to samples package
-class ZoyaCubeNode : Node() {
+class RotatingNode : Node() {
     private var cubeRotationX = 0f
     private var cubeRotationY = 0f
 

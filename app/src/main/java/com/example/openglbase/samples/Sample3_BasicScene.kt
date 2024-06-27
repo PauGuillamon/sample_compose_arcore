@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.openglbase.GLThreadedRenderer
 import com.example.openglbase.OpenGLView
-import com.example.openglbase.ZoyaCubeNode
 import com.example.openglbase.geometry.Generator
 import com.example.openglbase.math.Vector3
 import com.example.openglbase.opengl.GPUTexture
@@ -62,7 +61,7 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
     )
 
     private fun createNode(position: Vector3): Node {
-        return ZoyaCubeNode().apply {
+        return RotatingNode().apply {
             localPosition = position
             localScale = Vector3.one().scaled(0.2f)
         }

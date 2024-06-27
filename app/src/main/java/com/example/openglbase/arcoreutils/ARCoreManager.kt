@@ -3,7 +3,6 @@ package com.example.openglbase.arcoreutils
 import android.content.Context
 import android.opengl.GLES30
 import android.util.Size
-import com.example.openglbase.DisplayHelper
 import com.example.openglbase.opengl.GPUTexture
 import com.example.openglbase.scene.Camera3D
 import com.example.openglbase.utils.Logger

@@ -1,4 +1,4 @@
-package com.example.openglbase
+package com.example.openglbase.arcoreutils
 
 import android.content.Context
 import android.hardware.display.DisplayManager
@@ -11,7 +11,6 @@ import com.google.ar.core.Session
  * Based on:
  * https://github.com/google-ar/arcore-android-sdk/blob/master/samples/hello_ar_kotlin/app/src/main/java/com/google/ar/core/examples/java/common/helpers/DisplayRotationHelper.java
  */
- // TODO PGJ move to utils?
 class DisplayHelper(context: Context) : DisplayListener {
     private val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     private val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

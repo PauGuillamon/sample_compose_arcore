@@ -141,10 +141,10 @@ private fun TopBar(onInfoClick: () -> Unit) {
         Row(
             horizontalArrangement = Arrangement.End
         ) {
-            // TODO PGJ tint icon so it looks good both in light and dark mode
             Image(
                 painter = painterResource(id = R.drawable.baseline_info_outline_24),
                 contentDescription = "Open app description",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                 modifier = Modifier.clickable(onClick = onInfoClick)
             )
         }

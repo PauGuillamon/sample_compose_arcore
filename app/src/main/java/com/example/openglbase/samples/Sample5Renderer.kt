@@ -8,7 +8,6 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import com.example.openglbase.GLThreadedRenderer
 import com.example.openglbase.SceneOcclusionQuadRenderer
-import com.example.openglbase.ZoyaCubeNode
 import com.example.openglbase.arcoreutils.ARCoreManager
 import com.example.openglbase.arcoreutils.AnchorNode
 import com.example.openglbase.geometry.Generator
@@ -70,12 +69,12 @@ class Sample5Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GL
     )
     private val zoyaCubeBitmap = loadImage(context.assets, "textures/Zoya.png", true)
     private lateinit var zoyaCubeGpuTexture: GPUTexture
-    private val zoyaNode = ZoyaCubeNode().apply {
+    private val zoyaNode = RotatingNode().apply {
         localPosition = Vector3.forward().scaled(1f)
         localScale = Vector3.one().scaled(0.3f)
 
         val childrenScale = 0.5f
-        addChild(ZoyaCubeNode().apply {
+        addChild(RotatingNode().apply {
             localPosition = Vector3.right().scaled(1f)
             localScale = Vector3(childrenScale)
         })
@@ -112,7 +111,7 @@ class Sample5Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GL
                          */
                         Logger.LogError(TAG, "PGJ hitResult using trackableType:${trackable::class.simpleName}")
                         val anchorNode = AnchorNode(hitResult.createAnchor())
-                        anchorNode.addChild(ZoyaCubeNode().apply {
+                        anchorNode.addChild(RotatingNode().apply {
                             localScale = Vector3(0.5f)
                         })
                         addedNodes.add(anchorNode)
@@ -291,7 +290,7 @@ class Sample5Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GL
         // Simple & naive render pass. Might cause overdraw,
         // transparencies won't work correctly.
         rootNode.traverseEnabledTree {
-            if (it is ZoyaCubeNode) {
+            if (it is RotatingNode) {
                 renderZoyaCube(it)
             }
         }
@@ -302,9 +301,9 @@ class Sample5Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GL
         arCoreManager.renderPointCloud(camera3D)
     }
 
-    private fun renderZoyaCube(zoyaCubeNode: ZoyaCubeNode) {
+    private fun renderZoyaCube(node: Node) {
         zoyaCubeShader.use()
-        zoyaCubeShader.setMatrixUniform("uModelMatrix", zoyaCubeNode.worldModelMatrix)
+        zoyaCubeShader.setMatrixUniform("uModelMatrix", node.worldModelMatrix)
         zoyaCubeShader.setMatrixUniform("uViewMatrix", camera3D.viewMatrix)
         zoyaCubeShader.setMatrixUniform("uProjectionMatrix", camera3D.projectionMatrix)
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)

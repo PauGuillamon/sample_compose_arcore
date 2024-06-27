@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.openglbase.arcoreutils.ARCoreManager
 import com.example.openglbase.GLThreadedRenderer
 import com.example.openglbase.OpenGLView
-import com.example.openglbase.ZoyaCubeNode
 import com.example.openglbase.compose.CameraPermission
 import com.example.openglbase.geometry.Generator
 import com.example.openglbase.math.Vector3
@@ -55,15 +54,9 @@ private class Sample4Renderer(context: Context) : GLThreadedRenderer() {
     private val zoyaCubeBitmap = loadImage(context.assets, "textures/Zoya.png", true)
     private lateinit var zoyaCubeGpuTexture: GPUTexture
 
-    private val zoyaCubeNode = ZoyaCubeNode().apply {
+    private val zoyaCubeNode = RotatingNode().apply {
         localPosition = Vector3.forward().scaled(1.0f)
         localScale = Vector3.one().scaled(0.2f)
-
-        val childrenScale = 0.5f
-        addChild(ZoyaCubeNode().apply {
-            localPosition = Vector3.right().scaled(1f)
-            localScale = Vector3(childrenScale)
-        })
     }
 
     private val camera3D = Camera3D().apply {
