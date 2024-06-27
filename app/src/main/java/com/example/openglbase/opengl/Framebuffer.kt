@@ -122,7 +122,10 @@ class Framebuffer(
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0)
     }
 
-    // TODO PGJ make private? or add docs
+    /**
+     * Executes the [block] after binding this [Framebuffer].
+     * Unbind is done automatically after the block is executed..
+     */
     inline fun bindBlock(block: (it: Framebuffer) -> Unit) {
         bind()
         block(this)

@@ -21,6 +21,11 @@ class Sample5_ViewModel(context: Context, val postOnUiThread: (Runnable) -> Unit
     var fps by mutableStateOf("0")
         private set
 
+    var showingDepthMap by mutableStateOf(false)
+        private set
+    var showingFeaturePoints by mutableStateOf(false)
+        private set
+
     private var depthApiSupported = false
     var arCoreStats by mutableStateOf("")
         private set
@@ -46,6 +51,16 @@ class Sample5_ViewModel(context: Context, val postOnUiThread: (Runnable) -> Unit
 
     fun deleteLast() {
         glRenderer.deleteLast()
+    }
+
+    fun toggleDepthMap(show: Boolean) {
+        showingDepthMap = show
+        glRenderer.showDepthMap(show)
+    }
+
+    fun toggleFeaturePoints(show: Boolean) {
+        showingFeaturePoints = show
+        glRenderer.showFeaturePoints(show)
     }
 
     fun cameraPermissionWasGranted() {

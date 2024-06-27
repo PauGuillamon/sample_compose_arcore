@@ -5,20 +5,24 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -55,11 +59,21 @@ fun Sample5_ARcore(
         OpenGLView(glThreadedRenderer = viewModel.renderer)
         CameraPermission {
             viewModel.cameraPermissionWasGranted()
-            // Important to make the lambda as "remember" to avoid recompositions.
+            // Important to make the lambdas as "remember" to avoid recompositions.
             // Alternatively we can enable Compose's strong skipping mode
             val deleteLastLambda = remember { { viewModel.deleteLast() } }
+            val toggleDepthMapLambda = remember { { enabled: Boolean -> viewModel.toggleDepthMap(enabled) } }
+            val toggleFeaturePointsLambda = remember { { enabled: Boolean -> viewModel.toggleFeaturePoints(enabled) } }
             // TODO PGJ add UI to enable/disable depth map rendering
-            UILayer(viewModel.arCoreStats, viewModel.fps, deleteLastLambda)
+            UILayer(
+                stats = viewModel.arCoreStats,
+                fps = viewModel.fps,
+                onDeleteLast = deleteLastLambda,
+                showingDepthMap = viewModel.showingDepthMap,
+                onToggleDepthMap = toggleDepthMapLambda,
+                showingFeaturePoints = viewModel.showingFeaturePoints,
+                onToggleFeaturePoints = toggleFeaturePointsLambda
+            )
         }
     }
 }
@@ -79,20 +93,30 @@ private fun UILayer(
     stats: String,
     fps: String,
     onDeleteLast: () -> Unit,
+    showingDepthMap: Boolean,
+    onToggleDepthMap: (Boolean) -> Unit,
+    showingFeaturePoints: Boolean,
+    onToggleFeaturePoints: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        SessionStats(stats, fps)
-        Spacer(modifier = Modifier.weight(0.5f))
+        SessionStats(stats, fps, showingDepthMap, onToggleDepthMap, showingFeaturePoints, onToggleFeaturePoints)
         Toolbar(onDeleteLast)
     }
 }
 
 @Composable
-private fun SessionStats(stats: String, fps: String) {
+private fun SessionStats(
+    stats: String,
+    fps: String,
+    showingDepthMap: Boolean,
+    onToggleDepthMap: (Boolean) -> Unit,
+    showingFeaturePoints: Boolean,
+    onToggleFeaturePoints: (Boolean) -> Unit,
+) {
     Surface(
         modifier = Modifier
             .padding(8.dp)
@@ -106,7 +130,20 @@ private fun SessionStats(stats: String, fps: String) {
         ) {
             Text(text = stats)
             Text(text = "FPS: $fps")
+            TextCheckbox(showingDepthMap, onToggleDepthMap, "Depth Map")
+            TextCheckbox(showingFeaturePoints, onToggleFeaturePoints, "Feature points")
         }
+    }
+}
+
+@Composable
+private fun TextCheckbox(checked: Boolean, onCheckedChange: (Boolean) -> Unit, text: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Checkbox(checked = checked, onCheckedChange = onCheckedChange)
+        Text(text = text)
     }
 }
 
@@ -143,12 +180,22 @@ private fun Preview() {
     }
     OpenGLBaseTheme {
         val fps = remember { derivedStateOf { fpsCount.intValue.toString() } }
+        var showingDepthMap by remember { mutableStateOf(false) }
+        var showingFeaturePoints by remember { mutableStateOf(true) }
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             UILayer(
-                stats = "\tDepth API: true",
+                stats = "Depth API: true",
                 fps = fps.value,
                 onDeleteLast = {
                     fpsCount.intValue = 0
+                },
+                showingDepthMap = showingDepthMap,
+                onToggleDepthMap = {
+                    showingDepthMap = !showingDepthMap
+                },
+                showingFeaturePoints = showingFeaturePoints,
+                onToggleFeaturePoints = {
+                    showingFeaturePoints = !showingFeaturePoints
                 }
             )
         }

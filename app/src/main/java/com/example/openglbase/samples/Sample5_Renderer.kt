@@ -43,6 +43,8 @@ class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : G
 
     private var viewportWidth = 0
     private var viewportHeight = 0
+    private var showDepthMap = false
+    private var showFeaturePoints = false
 
     /**
      * This Framebuffer will hold the virtual scene's color and depth.
@@ -159,6 +161,18 @@ class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : G
         }
     }
 
+    fun showDepthMap(show: Boolean) {
+        postOnRenderThread {
+            showDepthMap = show
+        }
+    }
+
+    fun showFeaturePoints(show: Boolean) {
+        postOnRenderThread {
+            showFeaturePoints = show
+        }
+    }
+
     // TODO PGJ called too many times because of recompositions?
     fun cameraPermissionWasGranted() {
         arCoreManager.cameraPermissionWasGranted()
@@ -223,7 +237,11 @@ class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : G
 
     override fun onThreadedDrawFrame() {
         update()
-        renderFrame()
+        if (showDepthMap) {
+            arCoreManager.renderDepthMap()
+        } else {
+            renderFrame()
+        }
         onFrameFinished()
     }
 
@@ -294,11 +312,13 @@ class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : G
                 renderZoyaCube(it)
             }
         }
-        // By rendering the pointCloud after the virtual objects,
-        // the GPU can discard pixels sooner in the depth test.
-        // This works as long as none of the objects needed transparency,
-        // in which case the object's render pass would already fail.
-        arCoreManager.renderPointCloud(camera3D)
+        if (showFeaturePoints) {
+            // By rendering the pointCloud after the virtual objects,
+            // the GPU can discard pixels sooner in the depth test.
+            // This works as long as none of the objects needed transparency,
+            // in which case the object's render pass would already fail.
+            arCoreManager.renderPointCloud(camera3D)
+        }
     }
 
     private fun renderZoyaCube(node: Node) {
