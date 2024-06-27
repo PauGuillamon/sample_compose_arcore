@@ -6,10 +6,10 @@ import android.opengl.GLSurfaceView
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
-import com.example.openglbase.GLThreadedRenderer
 import com.example.openglbase.SceneOcclusionQuadRenderer
 import com.example.openglbase.arcoreutils.ARCoreManager
 import com.example.openglbase.arcoreutils.AnchorNode
+import com.example.openglbase.compose.GLThreadedRenderer
 import com.example.openglbase.geometry.Generator
 import com.example.openglbase.math.Vector3
 import com.example.openglbase.opengl.Framebuffer
@@ -30,7 +30,7 @@ import com.google.ar.core.Session
 import com.google.ar.core.TrackingState
 import java.util.ArrayDeque
 
-class Sample5Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GLThreadedRenderer() {
+class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GLThreadedRenderer() {
     override val listenToTouchEvents: Boolean = true
 
     var onFrameFinished: () -> Unit = {}

@@ -10,9 +10,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.openglbase.arcoreutils.ARCoreManager
-import com.example.openglbase.GLThreadedRenderer
-import com.example.openglbase.OpenGLView
 import com.example.openglbase.compose.CameraPermission
+import com.example.openglbase.compose.GLThreadedRenderer
+import com.example.openglbase.compose.OpenGLView
 import com.example.openglbase.geometry.Generator
 import com.example.openglbase.math.Vector3
 import com.example.openglbase.opengl.GPUTexture

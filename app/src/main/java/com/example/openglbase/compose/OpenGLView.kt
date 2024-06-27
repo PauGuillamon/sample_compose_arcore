@@ -1,4 +1,4 @@
-package com.example.openglbase
+package com.example.openglbase.compose
 
 import android.annotation.SuppressLint
 import android.opengl.EGL14

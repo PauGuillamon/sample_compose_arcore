@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.openglbase.OpenGLView
 import com.example.openglbase.R
 import com.example.openglbase.compose.CameraPermission
+import com.example.openglbase.compose.OpenGLView
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -41,8 +41,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun Sample5_ARcore(
     postOnUiThread: (Runnable) -> Unit,
-    viewModel: Sample5ViewModel = viewModel(
-        factory = Sample5ViewModelFactory(
+    viewModel: Sample5_ViewModel = viewModel(
+        factory = Sample5_ViewModelFactory(
             LocalContext.current,
             postOnUiThread
         )
@@ -52,29 +52,25 @@ fun Sample5_ARcore(
         modifier = Modifier.fillMaxSize(),
         color = Color.Black
     ) {
-        Box {
-            OpenGLView(glThreadedRenderer = viewModel.renderer)
-        }
-        Box {
-            CameraPermission {
-                viewModel.cameraPermissionWasGranted()
-                // Important to make the lambda as "remember" to avoid recompositions.
-                // Alternatively we can enable Compose's strong skipping mode
-                val deleteLastLambda = remember { { viewModel.deleteLast() } }
-                // TODO PGJ add UI to enable/disable depth map rendering
-                UILayer(viewModel.arCoreStats, viewModel.fps, deleteLastLambda)
-            }
+        OpenGLView(glThreadedRenderer = viewModel.renderer)
+        CameraPermission {
+            viewModel.cameraPermissionWasGranted()
+            // Important to make the lambda as "remember" to avoid recompositions.
+            // Alternatively we can enable Compose's strong skipping mode
+            val deleteLastLambda = remember { { viewModel.deleteLast() } }
+            // TODO PGJ add UI to enable/disable depth map rendering
+            UILayer(viewModel.arCoreStats, viewModel.fps, deleteLastLambda)
         }
     }
 }
 
-private class Sample5ViewModelFactory(
+private class Sample5_ViewModelFactory(
     private val context: Context,
     private val postOnUiThread: (Runnable) -> Unit,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return Sample5ViewModel(context, postOnUiThread) as T
+        return Sample5_ViewModel(context, postOnUiThread) as T
     }
 }
 

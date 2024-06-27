@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.openglbase.GLThreadedRenderer
-import com.example.openglbase.OpenGLView
+import com.example.openglbase.compose.GLThreadedRenderer
+import com.example.openglbase.compose.OpenGLView
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 
 @Composable
