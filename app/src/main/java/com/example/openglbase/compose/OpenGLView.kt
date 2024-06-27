@@ -78,7 +78,14 @@ private class RendererHolder(val renderer: GLThreadedRenderer) {
     }
 }
 
-// TODO PGJ Document OpenGLView, make it explicit it's just an example of how to do it.
+/**
+ * [OpenGLView] is an example of how to integrate a [GLSurfaceView] with Compose.
+ * [GLThreadedRenderer] is added as a util interface wrapping a few more
+ * things that [GLSurfaceView.Renderer] does.
+ * Touch events can be enabled with [GLThreadedRenderer.listenToTouchEvents] which will
+ * add a listener to [GLSurfaceView]. Alternatively, adding input events on the Compose
+ * world would also be possible. But one needs to be careful about which thread events are processed.
+ */
 @SuppressLint("ClickableViewAccessibility")
 @Composable
 fun OpenGLView(

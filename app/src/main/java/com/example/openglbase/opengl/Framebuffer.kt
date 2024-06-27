@@ -2,7 +2,12 @@ package com.example.openglbase.opengl
 
 import android.opengl.GLES30
 
-// TODO PGJ document it's a simple framebuffer implementation
+/**
+ * This is a simple implementation of a Framebuffer.
+ * [width] and [height] are used to setup texture sizes.
+ * [colorBufferInternalFormat] will be used to set the color buffer texture.
+ * [depthAsReadableTexture] controls whether the depth buffer is an actual Texture or a renderbuffer.
+ */
 class Framebuffer(
     val width: Int,
     val height: Int,
