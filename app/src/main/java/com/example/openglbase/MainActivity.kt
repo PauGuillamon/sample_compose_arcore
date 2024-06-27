@@ -46,19 +46,19 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.openglbase.samples.Sample1
-import com.example.openglbase.samples.Sample2
-import com.example.openglbase.samples.Sample3
-import com.example.openglbase.samples.Sample4
-import com.example.openglbase.samples.Sample5
+import com.example.openglbase.samples.Sample1_ComposableOpenGLView
+import com.example.openglbase.samples.Sample2_MultipleGLViews
+import com.example.openglbase.samples.Sample3_BasicScene
+import com.example.openglbase.samples.Sample4_BackgroundCamera
+import com.example.openglbase.samples.Sample5_ARcore
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 
 private enum class NavRoute(val route: String, @StringRes val description: Int) {
-    Sample_1("Sample OpenGL setup", R.string.sample1_description),
-    Sample_2("Sample 2", R.string.sample2_description),
-    Sample_3("Sample basic scene", R.string.sample3_description),
-    Sample_4("Sample background camera", R.string.sample4_description),
-    Sample_5("Sample ARCore", R.string.sample5_description),
+    Sample1("Sample OpenGL setup", R.string.sample1_description),
+    Sample2("Sample multiple GL views", R.string.sample2_description),
+    Sample3("Sample basic scene", R.string.sample3_description),
+    Sample4("Sample background camera", R.string.sample4_description),
+    Sample5("Sample ARCore", R.string.sample5_description),
 }
 
 class MainActivity : ComponentActivity() {
@@ -72,11 +72,11 @@ class MainActivity : ComponentActivity() {
                     startDestination = "main"
                 ) {
                     composable("main") { MainScreen { navController.navigate(it.route) } }
-                    composable(NavRoute.Sample_1.route) { Sample1() }
-                    composable(NavRoute.Sample_2.route) { Sample2() }
-                    composable(NavRoute.Sample_3.route) { Sample3() }
-                    composable(NavRoute.Sample_4.route) { Sample4() }
-                    composable(NavRoute.Sample_5.route) { Sample5(this@MainActivity::runOnUiThread) }
+                    composable(NavRoute.Sample1.route) { Sample1_ComposableOpenGLView() }
+                    composable(NavRoute.Sample2.route) { Sample2_MultipleGLViews() }
+                    composable(NavRoute.Sample3.route) { Sample3_BasicScene() }
+                    composable(NavRoute.Sample4.route) { Sample4_BackgroundCamera() }
+                    composable(NavRoute.Sample5.route) { Sample5_ARcore(this@MainActivity::runOnUiThread) }
                 }
             }
         }

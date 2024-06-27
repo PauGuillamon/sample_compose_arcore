@@ -27,7 +27,7 @@ import com.example.openglbase.utils.loadImage
 import com.google.ar.core.Frame
 
 @Composable
-fun Sample4() {
+fun Sample4_BackgroundCamera() {
     val context = LocalContext.current
     val renderer = remember { Sample4Renderer(context) }
     Box {

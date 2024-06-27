@@ -26,7 +26,7 @@ import com.example.openglbase.utils.ShaderReader
 import com.example.openglbase.utils.loadImage
 
 @Composable
-fun Sample3() {
+fun Sample3_BasicScene() {
     val context = LocalContext.current
     val renderer = remember { Sample3Renderer(context) }
     OpenGLView(
@@ -167,10 +167,9 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
 }
 
 @Preview
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun Droid2Preview() {
+private fun Droid2Preview() {
     OpenGLBaseTheme {
-        Sample3()
+        Sample3_BasicScene()
     }
 }

@@ -26,7 +26,7 @@ import com.example.openglbase.OpenGLView
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 
 @Composable
-fun Sample2() {
+fun Sample2_MultipleGLViews() {
     /**
      * Surface has a hardcoded background color to more easily
      * showcase the colors of the GL renderers.
@@ -99,10 +99,9 @@ private class Sample2Renderer(val name: String, backgroundColor: Color) : GLThre
 }
 
 @Preview
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun Sample2Preview() {
+private fun Sample2Preview() {
     OpenGLBaseTheme {
-        Sample2()
+        Sample2_MultipleGLViews()
     }
 }

@@ -39,7 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun Sample5(
+fun Sample5_ARcore(
     postOnUiThread: (Runnable) -> Unit,
     viewModel: Sample5ViewModel = viewModel(
         factory = Sample5ViewModelFactory(
@@ -137,7 +137,7 @@ private fun Toolbar(onDeleteLast: () -> Unit) {
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun Preview() {
+private fun Preview() {
     val fpsCount = remember { mutableIntStateOf(0) }
     MainScope().launch {
         while (true) {

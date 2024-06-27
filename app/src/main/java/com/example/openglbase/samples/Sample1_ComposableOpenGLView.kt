@@ -11,7 +11,7 @@ import com.example.openglbase.OpenGLView
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 
 @Composable
-fun Sample1() {
+fun Sample1_ComposableOpenGLView() {
     OpenGLView(
         glThreadedRenderer = Sample1Renderer(),
         modifier = Modifier.fillMaxSize()
@@ -44,10 +44,9 @@ private class Sample1Renderer : GLThreadedRenderer() {
 }
 
 @Preview
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun Sample1Preview() {
+private fun Sample1Preview() {
     OpenGLBaseTheme {
-        Sample1()
+        Sample1_ComposableOpenGLView()
     }
 }
