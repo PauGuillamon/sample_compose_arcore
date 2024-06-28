@@ -20,9 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.openglbase.R
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 import com.example.openglbase.utils.Logger
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -30,6 +32,11 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
+/**
+ * This composable informs the user to request the camera permission. Shows the rationale accordingly,
+ * even though it cannot detect whether the user had already previously denied the permission.
+ * [contentOnPermissionGranted] is *always* called if the permission is already granted.
+ */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraPermission(contentOnPermissionGranted: @Composable () -> Unit) {
@@ -46,7 +53,6 @@ fun CameraPermission(contentOnPermissionGranted: @Composable () -> Unit) {
     }
 }
 
-// TODO PGJ how does this look on a bigger screen / landscape?
 @Composable
 private fun CameraPermissionRequest(
     shouldShowRationale: Boolean,
@@ -70,9 +76,9 @@ private fun CameraPermissionRequest(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 val text = if (shouldShowRationale) {
-                    "Without the camera permission, this project cannot execute the AR experience."
+                    stringResource(R.string.camera_permission_rationale)
                 } else {
-                    "Camera permission is needed to run this project. Please, grant the permission in settings."
+                    stringResource(R.string.camera_permission_request)
                 }
                 Text(
                     text = text,
@@ -94,12 +100,16 @@ private fun CameraPermissionRequest(
 @Composable
 fun PreviewCameraPermission() {
     OpenGLBaseTheme {
-        var showRationale by remember { mutableStateOf(false) }
-        Box(modifier = Modifier.fillMaxSize()) {
-            CameraPermissionRequest(
-                showRationale
-            ) {
-                showRationale = true
+        Surface(
+            color = MaterialTheme.colorScheme.onBackground
+        ) {
+            var showRationale by remember { mutableStateOf(false) }
+            Box(modifier = Modifier.fillMaxSize()) {
+                CameraPermissionRequest(
+                    showRationale
+                ) {
+                    showRationale = true
+                }
             }
         }
     }
