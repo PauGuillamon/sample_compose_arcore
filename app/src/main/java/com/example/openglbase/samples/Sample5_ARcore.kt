@@ -6,12 +6,10 @@ import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.openglbase.R
 import com.example.openglbase.compose.CameraPermission
 import com.example.openglbase.compose.OpenGLView
+import com.example.openglbase.compose.TextCheckbox
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -129,20 +128,9 @@ private fun SessionStats(
         ) {
             Text(text = stats)
             Text(text = "FPS: $fps")
-            TextCheckbox(showingDepthMap, onToggleDepthMap, "Depth Map")
-            TextCheckbox(showingFeaturePoints, onToggleFeaturePoints, "Feature points")
+            TextCheckbox("Depth Map", showingDepthMap, onToggleDepthMap)
+            TextCheckbox("Feature points", showingFeaturePoints, onToggleFeaturePoints)
         }
-    }
-}
-
-@Composable
-private fun TextCheckbox(checked: Boolean, onCheckedChange: (Boolean) -> Unit, text: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Checkbox(checked = checked, onCheckedChange = onCheckedChange)
-        Text(text = text)
     }
 }
 

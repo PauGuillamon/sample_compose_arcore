@@ -16,6 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OpenGLBase"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -30,6 +30,7 @@ import com.google.ar.core.Session
 import com.google.ar.core.TrackingState
 import java.util.ArrayDeque
 
+// TODO PGJ rename to Sample5_ARCoreRenderer?
 class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GLThreadedRenderer() {
     override val listenToTouchEvents: Boolean = true
 
@@ -214,6 +215,7 @@ class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : G
     override fun onThreadedSurfaceChanged(width: Int, height: Int) {
         Logger.LogInfo(TAG, "MyRenderer onThreadedSurfaceChanged ${width}x$height")
         arCoreManager.onSurfaceChanged(width, height)
+        camera3D.setViewport(width, height) // Only useful when camera permission is not granted yet.
         viewportWidth = width
         viewportHeight = height
         if (width != virtualSceneFramebuffer.width || height != virtualSceneFramebuffer.height) {

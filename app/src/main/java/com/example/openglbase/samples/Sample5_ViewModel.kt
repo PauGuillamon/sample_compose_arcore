@@ -9,6 +9,7 @@ import com.example.openglbase.compose.GLThreadedRenderer
 import com.example.openglbase.utils.Logger
 import kotlin.random.Random
 
+// TODO PGJ rename to Sample5_ARCoreViewModel?
 class Sample5_ViewModel(context: Context, val postOnUiThread: (Runnable) -> Unit) : ViewModel() {
     // TODO PGJ I don't like having this mutableStateOf here. Do I need it if I can avoid recompositions another way?
     private val glRenderer = Sample5_Renderer(context) {
@@ -77,7 +78,7 @@ class Sample5_ViewModel(context: Context, val postOnUiThread: (Runnable) -> Unit
         if (timeSinceLastUpdate > 1000) {
             lastFrameTime = now
             // Adding some randomnes to it to test recompositions
-            // TODO GPJ remove randomnes
+            // TODO PGJ remove randomnes
             framesCount += Random.nextInt(0, 100)
             fps = framesCount.toString()
             framesCount = 0
