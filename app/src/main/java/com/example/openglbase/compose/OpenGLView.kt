@@ -22,6 +22,8 @@ import javax.microedition.khronos.egl.EGLContext
 import javax.microedition.khronos.egl.EGLDisplay
 import javax.microedition.khronos.opengles.GL10
 
+private const val TAG = "OpenGLView"
+
 abstract class GLThreadedRenderer {
     abstract val listenToTouchEvents: Boolean
 
@@ -49,14 +51,14 @@ private class RendererHolder(val renderer: GLThreadedRenderer) {
     fun onResume() {
         view.onResume()
         renderer.view = view
-        Logger.LogInfo("PGJ", "PGJ OpenGLView onResume")
+        Logger.LogInfo(TAG, "OpenGLView onResume")
         renderer.onViewLifecycleResume()
         resumed = true
     }
 
     fun onPause() {
         if (resumed) {
-            Logger.LogInfo("PGJ", "PGJ OpenGLView onPause")
+            Logger.LogInfo(TAG, "OpenGLView onPause")
             view.onPause()
             renderer.view = null
             renderer.onViewLifecyclePause()
@@ -144,7 +146,7 @@ fun OpenGLView(
             view
         },
         onRelease = {
-            Logger.LogError("PGJ", "PGJ OpenGLView AndroidView onRelease")
+            Logger.LogError(TAG, "OpenGLView AndroidView onRelease")
             rendererHolder.onPause()
         }
     )
@@ -156,7 +158,7 @@ private fun checkEglError(
 ) {
     var error: Int
     while (egl.eglGetError().also { error = it } != EGL10.EGL_SUCCESS) {
-        Logger.LogError("PGJ", String.format("%s: EGL error: 0x%x", prompt, error))
+        Logger.LogError(TAG, String.format("%s: EGL error: 0x%x", prompt, error))
     }
 }
 
@@ -237,7 +239,7 @@ private class ConfigChooser : GLSurfaceView.EGLConfigChooser {
             val alphaSize = findConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0)
             val renderableType = findConfigAttrib(egl, display, config, EGL10.EGL_RENDERABLE_TYPE, 0)
 
-            Logger.LogInfo("PGJ", "Config " +
+            Logger.LogInfo(TAG, "Config " +
                     "RGBA:${redSize}x${greenSize}x${blueSize}x${alphaSize} " +
                     "depth:$depthSize stencil:$stencilSize " +
                     "EGL_RENDERABLE_TYPE:0x${renderableType.toHexString()}")

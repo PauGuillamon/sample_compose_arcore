@@ -121,7 +121,7 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
 
     private fun ensureArCoreSessionCreated(context: Context) {
         if (arCoreSession == null && cameraPermissionGranted.get()) {
-            Logger.LogInfo("PGJ", "PGJ Creating Session---------------------")
+            Logger.LogInfo(TAG, "ARCoreManager Creating ARCore Session")
             val session = Session(context)
             session.configure(Config(session).apply {
                 lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
@@ -146,7 +146,8 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
                         candidate = true
                     }
                     Logger.LogInfo(
-                        TAG, "cameraConfig[${if (candidate) "X" else " "}]: " +
+                        TAG,
+                        "cameraConfig[${if (candidate) "X" else " "}]: " +
                                 "camId:${cameraConfig.cameraId} " +
                                 "fpsRange:${cameraConfig.fpsRange} " +
                                 "CpuImageSize:${cameraConfig.imageSize} " +

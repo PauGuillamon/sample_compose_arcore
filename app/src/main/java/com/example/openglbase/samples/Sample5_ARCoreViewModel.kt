@@ -32,7 +32,7 @@ class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -
     private var framesCount = 0
 
     init {
-        Logger.LogWarning("PGJ", "GLSceneViewModel created")
+        Logger.LogWarning(TAG, "GLSceneViewModel created")
         glRenderer.onFrameFinished = {
             postOnUiThread {
                 updateFps()
@@ -43,7 +43,7 @@ class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -
 
     override fun onCleared() {
         super.onCleared()
-        Logger.LogWarning("PGJ", "GLSceneViewModel cleared")
+        Logger.LogWarning(TAG, "GLSceneViewModel cleared")
         glRenderer.onClear()
     }
 
@@ -92,4 +92,9 @@ class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -
             .append("\tDepth API: $depthApiSupported")
             .toString()
     }
+
+    companion object {
+        private const val TAG = "Sample5_ARCoreViewModel"
+    }
+
 }

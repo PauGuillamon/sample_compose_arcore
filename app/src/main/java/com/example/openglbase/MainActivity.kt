@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -55,7 +54,6 @@ import com.example.openglbase.samples.Sample3_BasicScene
 import com.example.openglbase.samples.Sample4_BackgroundCamera
 import com.example.openglbase.samples.Sample5_ARCore
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
-import com.example.openglbase.utils.Logger
 import com.google.ar.core.ArCoreApk
 
 private enum class NavRoute(val route: String, val arCoreDependency: Boolean, @StringRes val description: Int) {
@@ -109,7 +107,6 @@ class MainActivity : ComponentActivity() {
 
     private fun checkArCoreAvailability() {
         ArCoreApk.getInstance().checkAvailabilityAsync(applicationContext) {
-            Logger.LogError("PGJ", "PGJ checkArCoreAvailability Async returned: $it")
             if (it == ArCoreApk.Availability.SUPPORTED_INSTALLED) {
                 arCoreSupportedAndUpdated = ArCoreInstallationState.INSTALLED
                 showInstallArCoreButton = false

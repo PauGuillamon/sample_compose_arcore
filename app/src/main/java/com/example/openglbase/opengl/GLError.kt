@@ -24,6 +24,5 @@ private fun logError(errorCode: Int, location: String) {
         else -> "UNKNOWN(errorCode:$errorCode)"
     }
     val locationStr = if (location.isEmpty()) "" else " at [$location]"
-    Logger.LogError("PGJ", "GLError:$errorName at \"$locationStr\"") // TODO PGJ
-    //Logger.LogError("GLError", "Error:$errorName$locationStr")
+    Logger.LogError("GLError", "GLError:$errorName at \"$locationStr\"")
 }

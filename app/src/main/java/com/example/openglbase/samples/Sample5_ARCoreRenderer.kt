@@ -90,7 +90,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
 
     private val gestureDetector = GestureDetector(context, object: SimpleOnGestureListener() {
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            Logger.LogError(TAG, "PGJ GestureDetector onSingleTapUp at ${e.x}x${e.y}")
+            Logger.LogError(TAG, "GestureDetector onSingleTapUp at ${e.x}x${e.y}")
             arCoreManager.arCoreSession ?: return true
             arCoreManager.currentFrame?.let { frame ->
                 val hitResults = frame.hitTest(e.x, e.y)
@@ -111,7 +111,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
                          * issues given that Anchors have an impact on CPU usage. A better approach
                          * could be to reuse Anchors when placing objects close together.
                          */
-                        Logger.LogError(TAG, "PGJ hitResult using trackableType:${trackable::class.simpleName}")
+                        Logger.LogError(TAG, "HitResult using trackableType:${trackable::class.simpleName}")
                         val anchorNode = AnchorNode(hitResult.createAnchor())
                         anchorNode.addChild(RotatingNode().apply {
                             localScale = Vector3(0.5f)
@@ -333,7 +333,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
     }
 
     companion object {
-        private const val TAG = "MyRenderer" // TODO PGJ
+        private const val TAG = "Sample5_ARCoreRenderer"
     }
 
 }
