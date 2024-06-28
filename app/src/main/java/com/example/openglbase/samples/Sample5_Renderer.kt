@@ -334,7 +334,7 @@ class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : G
     }
 
     companion object {
-        private const val TAG = "MyRenderer"
+        private const val TAG = "MyRenderer" // TODO PGJ
     }
 
 }
