@@ -33,16 +33,18 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
 /**
- * This composable informs the user to request the camera permission. Shows the rationale accordingly,
- * even though it cannot detect whether the user had already previously denied the permission.
- * [contentOnPermissionGranted] is *always* called if the permission is already granted.
+ * This composable informs the user to request the camera permission. Shows the
+ * rationale accordingly, even though it cannot detect whether the user had
+ * already previously denied the permission.
+ *
+ * [contentOnPermissionGranted] is *always* called for every recomposition if
+ * the permission status is granted. This is not great but it works for this
+ * project.
  */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraPermission(contentOnPermissionGranted: @Composable () -> Unit) {
-    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA) {
-        Logger.LogError("PGJ", "PGJ PermissionState onPermissionResult it:$it")
-    }
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     if (cameraPermissionState.status.isGranted) {
         contentOnPermissionGranted()
     } else {

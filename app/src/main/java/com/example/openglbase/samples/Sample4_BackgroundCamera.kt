@@ -127,6 +127,7 @@ private class Sample4Renderer(context: Context) : GLThreadedRenderer() {
     }
 
     fun cameraPermissionWasGranted() {
+        // Might be called multiple times due to the limitations of CameraPermission.
         arCoreManager.cameraPermissionWasGranted()
     }
 

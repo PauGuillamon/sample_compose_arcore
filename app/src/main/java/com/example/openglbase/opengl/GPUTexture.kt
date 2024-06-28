@@ -7,7 +7,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 /**
- * @param textureTarget: The type of texture this object will target, such as GL_TEXTURE_2D or GL_TEXTURE_CUBE_MAP
+ * @param target: The type of texture this object will target, such as GL_TEXTURE_2D or GL_TEXTURE_CUBE_MAP
  * @param paramsInt: list of param name and Int value pairs for this Texture. Example: {GL_TEXTURE_MIN_FILTER, GL_NEAREST}
  * @param paramsFloatVec: list of param name and float vector values pairs for this Texture. Example: {GL_TEXTURE_BORDER_COLOR, {1.0f, 1.0f, 1.0f, 1.0f}}
  */
@@ -16,7 +16,6 @@ class GPUTexture(
     paramsInt: List<Pair<Int, Int>>,
     paramsFloatVec: List<Pair<Int, FloatArray>> = emptyList()
 ) {
-    // TODO PGJ create typealias? or something stronger?
     var id: Int
         private set
 

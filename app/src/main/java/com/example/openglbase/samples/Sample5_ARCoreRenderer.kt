@@ -173,8 +173,8 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         }
     }
 
-    // TODO PGJ called too many times because of recompositions?
     fun cameraPermissionWasGranted() {
+        // Might be called multiple times due to the limitations of CameraPermission.
         arCoreManager.cameraPermissionWasGranted()
     }
 
