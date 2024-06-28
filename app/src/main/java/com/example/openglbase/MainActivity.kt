@@ -53,7 +53,7 @@ import com.example.openglbase.samples.Sample1_ComposableOpenGLView
 import com.example.openglbase.samples.Sample2_MultipleGLViews
 import com.example.openglbase.samples.Sample3_BasicScene
 import com.example.openglbase.samples.Sample4_BackgroundCamera
-import com.example.openglbase.samples.Sample5_ARcore
+import com.example.openglbase.samples.Sample5_ARCore
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 import com.example.openglbase.utils.Logger
 import com.google.ar.core.ArCoreApk
@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                     composable(NavRoute.Sample2.route) { Sample2_MultipleGLViews() }
                     composable(NavRoute.Sample3.route) { Sample3_BasicScene() }
                     composable(NavRoute.Sample4.route) { Sample4_BackgroundCamera() }
-                    composable(NavRoute.Sample5.route) { Sample5_ARcore(this@MainActivity::runOnUiThread) }
+                    composable(NavRoute.Sample5.route) { Sample5_ARCore(this@MainActivity::runOnUiThread) }
                 }
             }
         }

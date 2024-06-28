@@ -96,7 +96,6 @@ fun OpenGLView(
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            Logger.LogError("PGJ", "PGJ OpenGLView event:$event")
             when (event) {
                 Lifecycle.Event.ON_RESUME -> rendererHolder.onResume()
                 Lifecycle.Event.ON_PAUSE -> rendererHolder.onPause()

@@ -30,8 +30,7 @@ import com.google.ar.core.Session
 import com.google.ar.core.TrackingState
 import java.util.ArrayDeque
 
-// TODO PGJ rename to Sample5_ARCoreRenderer?
-class Sample5_Renderer(context: Context, onArCoreSessionCreated: () -> Unit) : GLThreadedRenderer() {
+class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Unit) : GLThreadedRenderer() {
     override val listenToTouchEvents: Boolean = true
 
     var onFrameFinished: () -> Unit = {}

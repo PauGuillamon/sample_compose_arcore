@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -42,9 +41,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun Sample5_ARcore(
+fun Sample5_ARCore(
     postOnUiThread: (Runnable) -> Unit,
-    viewModel: Sample5_ViewModel = viewModel(
+    viewModel: Sample5_ARCoreViewModel = viewModel(
         factory = Sample5_ViewModelFactory(
             LocalContext.current,
             postOnUiThread
@@ -82,7 +81,7 @@ private class Sample5_ViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return Sample5_ViewModel(context, postOnUiThread) as T
+        return Sample5_ARCoreViewModel(context, postOnUiThread) as T
     }
 }
 

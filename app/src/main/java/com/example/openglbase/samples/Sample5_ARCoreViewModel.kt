@@ -9,10 +9,9 @@ import com.example.openglbase.compose.GLThreadedRenderer
 import com.example.openglbase.utils.Logger
 import kotlin.random.Random
 
-// TODO PGJ rename to Sample5_ARCoreViewModel?
-class Sample5_ViewModel(context: Context, val postOnUiThread: (Runnable) -> Unit) : ViewModel() {
+class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -> Unit) : ViewModel() {
     // TODO PGJ I don't like having this mutableStateOf here. Do I need it if I can avoid recompositions another way?
-    private val glRenderer = Sample5_Renderer(context) {
+    private val glRenderer = Sample5_ARCoreRenderer(context) {
         postOnUiThread {
             onArCoreSessionCreated()
         }
