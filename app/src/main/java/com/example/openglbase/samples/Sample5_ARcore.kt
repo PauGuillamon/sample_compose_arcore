@@ -64,7 +64,6 @@ fun Sample5_ARcore(
             val deleteLastLambda = remember { { viewModel.deleteLast() } }
             val toggleDepthMapLambda = remember { { enabled: Boolean -> viewModel.toggleDepthMap(enabled) } }
             val toggleFeaturePointsLambda = remember { { enabled: Boolean -> viewModel.toggleFeaturePoints(enabled) } }
-            // TODO PGJ add UI to enable/disable depth map rendering
             UILayer(
                 stats = viewModel.arCoreStats,
                 fps = viewModel.fps,

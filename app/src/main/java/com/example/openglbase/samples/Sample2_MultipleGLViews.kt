@@ -46,7 +46,6 @@ fun Sample2_MultipleGLViews() {
                     .padding(16.dp),
                 textAlign = TextAlign.Center,
             )
-            // TODO PGJ showcase switching to ExternalSurface and EmbeddedExternalSurface
             OpenGLView(
                 glThreadedRenderer = Sample2Renderer("top", MaterialTheme.colorScheme.inversePrimary),
                 modifier = Modifier

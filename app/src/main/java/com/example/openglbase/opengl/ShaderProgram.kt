@@ -5,7 +5,6 @@ import android.util.Log
 import com.example.openglbase.math.Matrix
 import com.example.openglbase.utils.Logger
 
-// TODO PGJ keep the shader code in memory so we don't need to read again from file or optimize for memory footprint and read again when required?
 class ShaderProgram(private val vertexShaderCode: String, private val fragmentShaderCode: String) {
 
     private var id = 0

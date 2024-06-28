@@ -115,8 +115,7 @@ private class Sample4Renderer(context: Context) : GLThreadedRenderer() {
         val view = view ?: return
         deltaTime.update()
         arCoreManager.update(view.context) { frame ->
-            // TODO PGJ remove before presentation
-            // updateCameraPosition(frame)
+            updateCameraPosition(frame)
         }
         zoyaCubeNode.update(deltaTime.deltaTimeSeconds)
     }
