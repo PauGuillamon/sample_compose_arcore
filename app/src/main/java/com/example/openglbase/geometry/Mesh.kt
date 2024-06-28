@@ -16,6 +16,15 @@ class Mesh {
     var indicesData = IntBuffer.allocate(0)
         private set
 
+    fun copy(): Mesh {
+        val newMesh = Mesh()
+        newMesh.verticesBufferSize = verticesBufferSize
+        newMesh.verticesData = verticesData
+        newMesh.indicesDataSize = indicesDataSize
+        newMesh.indicesData = indicesData
+        return newMesh
+    }
+
     fun load(vertices: List<Vertex>, indices: List<VertexIndex>) {
         verticesBufferSize = vertices.size * Vertex.SIZE_BYTES
         verticesData = ByteBuffer.allocateDirect(verticesBufferSize).order(ByteOrder.nativeOrder()).asFloatBuffer()

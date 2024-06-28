@@ -3,7 +3,6 @@ package com.example.openglbase.opengl
 import android.opengl.GLES30
 import com.example.openglbase.geometry.Mesh
 
-// TODO PGJ how to make it the owner of the vertices so it cannot be messed up from other threads?
 class RenderableMesh {
     var VAO = 0
         private set
@@ -16,11 +15,11 @@ class RenderableMesh {
     private var uploaded = false
 
     fun setMesh(newMesh: Mesh) {
-        mesh = newMesh
+        mesh = newMesh.copy()
     }
 
     fun updateGpuMesh(newMesh: Mesh) {
-        mesh = newMesh
+        mesh = newMesh.copy()
         uploadToGPU()
     }
 
