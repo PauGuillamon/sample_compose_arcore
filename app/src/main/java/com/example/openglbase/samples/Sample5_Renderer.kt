@@ -6,7 +6,6 @@ import android.opengl.GLSurfaceView
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
-import com.example.openglbase.SceneOcclusionQuadRenderer
 import com.example.openglbase.arcoreutils.ARCoreManager
 import com.example.openglbase.arcoreutils.AnchorNode
 import com.example.openglbase.compose.GLThreadedRenderer
@@ -17,6 +16,7 @@ import com.example.openglbase.opengl.GPUTexture
 import com.example.openglbase.opengl.RenderableMesh
 import com.example.openglbase.opengl.ShaderProgram
 import com.example.openglbase.opengl.glHasError
+import com.example.openglbase.renderer.SceneOcclusionQuadRenderer
 import com.example.openglbase.scene.Camera3D
 import com.example.openglbase.scene.DeltaTime
 import com.example.openglbase.scene.Node

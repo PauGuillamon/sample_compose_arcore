@@ -1,4 +1,4 @@
-package com.example.openglbase
+package com.example.openglbase.renderer
 
 import android.content.Context
 import android.opengl.GLES30
@@ -9,7 +9,6 @@ import com.example.openglbase.opengl.ShaderProgram
 import com.example.openglbase.opengl.glHasError
 import com.example.openglbase.utils.ShaderReader
 
-// TODO PGJ move to another package
 class SceneOcclusionQuadRenderer(context: Context) {
     private val shader = ShaderProgram(
         ShaderReader.readShader(context, "shaders/scene_occlusion_quad.vert"),
@@ -24,7 +23,7 @@ class SceneOcclusionQuadRenderer(context: Context) {
         shader.compile()
         renderableQuad.initializeGPU()
         renderableQuad.uploadToGPU()
-        glHasError("TextureQuadRenderer")
+        glHasError("SceneOcclusionQuadRenderer initializeGPU")
     }
 
     fun clearGPU() {
