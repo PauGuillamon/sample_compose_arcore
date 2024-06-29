@@ -80,7 +80,7 @@ private fun CameraPermissionRequest(
                 val text = if (shouldShowRationale) {
                     stringResource(R.string.camera_permission_rationale)
                 } else {
-                    stringResource(R.string.camera_permission_request)
+                    stringResource(R.string.camera_permission_please_grant)
                 }
                 Text(
                     text = text,
@@ -89,7 +89,7 @@ private fun CameraPermissionRequest(
                         .padding(8.dp)
                 )
                 Button(onClick = onRequestPermissionClick) {
-                    Text(text = "Request camera permission")
+                    Text(text = stringResource(R.string.camera_request_permission))
                 }
             }
         }

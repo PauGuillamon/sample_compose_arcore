@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -133,9 +134,9 @@ private fun SessionStats(
                 .padding(8.dp)
         ) {
             Text(text = stats)
-            Text(text = "FPS: $fps")
-            TextCheckbox("Depth Map", showingDepthMap, onToggleDepthMap)
-            TextCheckbox("Feature points", showingFeaturePoints, onToggleFeaturePoints)
+            Text(text = stringResource(id = R.string.sample5_fps, fps))
+            TextCheckbox(stringResource(R.string.sample5_depth_map), showingDepthMap, onToggleDepthMap)
+            TextCheckbox(stringResource(R.string.sample5_feature_points), showingFeaturePoints, onToggleFeaturePoints)
         }
     }
 }
@@ -153,7 +154,7 @@ private fun Toolbar(onDeleteLast: () -> Unit) {
             contentDescription = "Delete last"
         )
         Text(
-            text = "Delete last",
+            text = stringResource(id = R.string.sample5_delete_last),
             modifier = Modifier.padding(start = 8.dp)
         )
     }

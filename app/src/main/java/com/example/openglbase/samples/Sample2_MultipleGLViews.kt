@@ -41,7 +41,7 @@ fun Sample2_MultipleGLViews() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Sample 2",
+                text = "This is a title",
                 modifier = Modifier
                     .padding(16.dp),
                 textAlign = TextAlign.Center,
