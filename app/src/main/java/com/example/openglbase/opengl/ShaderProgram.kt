@@ -72,6 +72,13 @@ class ShaderProgram(private val vertexShaderCode: String, private val fragmentSh
         setIntUniform(uniformName, if (value) 1 else 0)
     }
 
+    fun setFloatUniform(uniformName: String, value: Float) {
+        val uniformLocation = GLES30.glGetUniformLocation(id, uniformName)
+        if (uniformLocation >= 0) {
+            GLES30.glUniform1f(uniformLocation, value)
+        }
+    }
+
     private fun loadShader(shaderType: Int, shaderCode: String): Int {
         var shaderId = GLES30.glCreateShader(shaderType)
         GLES30.glShaderSource(shaderId, shaderCode)

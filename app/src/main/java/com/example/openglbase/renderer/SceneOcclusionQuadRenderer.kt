@@ -40,7 +40,9 @@ class SceneOcclusionQuadRenderer(context: Context) {
     fun render(
         sceneColorTexture: GPUTexture,
         sceneDepthTexture: GPUTexture,
-        depthMapTexture: GPUTexture?
+        depthMapTexture: GPUTexture?,
+        cameraNearPlane: Float,
+        cameraFarPlane: Float
     ) {
         shader.use()
         shader.setTextureSampler2D("uSceneColorTexture", 0)
@@ -51,6 +53,8 @@ class SceneOcclusionQuadRenderer(context: Context) {
         sceneDepthTexture.bind()
         val depthMapAvailable = depthMapTexture != null
         shader.setBoolUniform("uDepthMapAvailable", depthMapAvailable)
+        shader.setFloatUniform("uCameraNearPlane", cameraNearPlane)
+        shader.setFloatUniform("uCameraFarPlane", cameraFarPlane)
         if (depthMapAvailable) {
             shader.setTextureSampler2D("uDepthMapTexture", 2)
             GLES30.glActiveTexture(GLES30.GL_TEXTURE2)

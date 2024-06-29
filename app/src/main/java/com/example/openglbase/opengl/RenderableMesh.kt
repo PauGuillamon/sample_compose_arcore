@@ -15,6 +15,9 @@ class RenderableMesh {
     private var uploaded = false
 
     fun setMesh(newMesh: Mesh) {
+        if (mesh != null) {
+            throw IllegalStateException("A mesh had already been set. Maybe you wanted to use updateGpuMesh()?")
+        }
         mesh = newMesh.copy()
     }
 

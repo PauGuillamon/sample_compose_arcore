@@ -297,7 +297,9 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         sceneOcclusionQuadRenderer.render(
             virtualSceneFramebuffer.colorTexture,
             virtualSceneFramebuffer.depthTexture!!,
-            depthTexture
+            depthTexture,
+            camera3D.nearPlane,
+            camera3D.farPlane
         )
 
         glHasError("end onDrawFrame")
