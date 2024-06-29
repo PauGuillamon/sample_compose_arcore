@@ -168,7 +168,7 @@ private class ContextFactory : GLSurfaceView.EGLContextFactory {
         display: EGLDisplay,
         eglConfig: EGLConfig,
     ): EGLContext {
-        val attributeList = intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 3, EGL10.EGL_NONE) // TODO PGJ
+        val attributeList = intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 3, EGL10.EGL_NONE)
         val context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attributeList)
         checkEglError("eglCreateContext", egl)
         return context
@@ -197,8 +197,7 @@ private class ConfigChooser : GLSurfaceView.EGLConfigChooser {
         EGL10.EGL_ALPHA_SIZE, 4,
         EGL10.EGL_DEPTH_SIZE, 24,
         EGL10.EGL_STENCIL_SIZE, 0,
-        EGL10.EGL_RENDERABLE_TYPE, EGL15.EGL_OPENGL_ES3_BIT, // TODO PGJ
-        // if (openglEsClientMajorVersion == 3) EGL15.EGL_OPENGL_ES3_BIT else EGL14.EGL_OPENGL_ES2_BIT,
+        EGL10.EGL_RENDERABLE_TYPE, EGL15.EGL_OPENGL_ES3_BIT, // Requests OpenGL ES 3
         EGL10.EGL_NONE,
     )
 
@@ -269,11 +268,6 @@ private class ConfigChooser : GLSurfaceView.EGLConfigChooser {
     ): Int {
         val value = IntArray(1)
         return if (egl.eglGetConfigAttrib(display, config, attribute, value)) value[0] else defaultValue
-    }
-
-
-    companion object {
-        private const val EGL_OPENGL_ES2_BIT = 4 // TODO GL ES 3
     }
 }
 
