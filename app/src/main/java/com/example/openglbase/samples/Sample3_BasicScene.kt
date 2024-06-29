@@ -3,12 +3,27 @@ package com.example.openglbase.samples
 import android.content.Context
 import android.opengl.GLES30
 import android.view.MotionEvent
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.openglbase.R
 import com.example.openglbase.compose.GLThreadedRenderer
 import com.example.openglbase.compose.OpenGLView
 import com.example.openglbase.geometry.Generator
@@ -33,6 +48,49 @@ fun Sample3_BasicScene() {
         modifier = Modifier
             .fillMaxSize()
     )
+    ArrowControls(renderer)
+
+}
+
+/**
+ * Very simple arrow controls to control the position of the camera.
+ */
+@Composable
+private fun ArrowControls(renderer: Sample3Renderer) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ImageButton(R.drawable.baseline_keyboard_double_arrow_up_24, renderer::moveCameraUp)
+            ImageButton(R.drawable.baseline_keyboard_arrow_up_24, renderer::moveCameraForward)
+            ImageButton(R.drawable.baseline_keyboard_double_arrow_down_24, renderer::moveCameraDown)
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ImageButton(R.drawable.baseline_keyboard_arrow_left_24, renderer::moveCameraLeft)
+            ImageButton(R.drawable.baseline_keyboard_arrow_down_24, renderer::moveCameraBackward)
+            ImageButton(R.drawable.baseline_keyboard_arrow_right_24, renderer::moveCameraRight)
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+    }
+}
+
+@Composable
+private fun ImageButton(@DrawableRes id: Int, onClick: () -> Unit) {
+    Button(onClick = onClick, modifier = Modifier.padding(end = 4.dp)) {
+        Image(
+            painter = painterResource(id = id),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+            contentDescription = "ImageButton:$id"
+        )
+    }
 }
 
 private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
@@ -68,10 +126,9 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
     }
 
     private val camera3D = Camera3D().apply {
-        worldPosition.set(0.0f, 0.0f, 2.0f)
+        setPosition(Vector3(0.0f, 0.0f, 0.0f))
     }
-    private var cameraMovesForwards = true
-    private var cameraMovesUpwards = true
+    private val cameraMovementStep = 0.2f
 
     override fun onViewLifecycleResume() {
         // Empty
@@ -117,7 +174,6 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
 
     private fun update() {
         deltaTime.update()
-        updateCameraPosition()
         nodes.forEach {
             it.update(deltaTime.deltaTimeSeconds)
         }
@@ -143,25 +199,35 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
         }
     }
 
-    private fun updateCameraPosition() {
-        // TODO PGJ maybe a more interesting camera movement? try to make it rotate around the cube up and down
-        // TODO PGJ add more cubes to see better that what is moving is the camera
-        val cameraSpeed = 2f
-        var direction = if (cameraMovesForwards) Vector3.forward() else Vector3.back()
-        direction = Vector3.add(direction, (if (cameraMovesUpwards) Vector3.up() else Vector3.down()).scaled(2f))
-        direction = direction.normalized()
-        val newCameraPosition = Vector3.add(camera3D.worldPosition, direction.scaled(deltaTime.deltaTimeSeconds * cameraSpeed))
-        if (newCameraPosition.z > 10.0f) {
-            cameraMovesForwards = true
-        } else if (newCameraPosition.z < 0.2f) {
-            cameraMovesForwards = false
+    fun moveCameraUp() {
+        moveCamera(Vector3.up().scaled(cameraMovementStep))
+    }
+
+    fun moveCameraDown() {
+        moveCamera(Vector3.down().scaled(cameraMovementStep))
+    }
+
+    fun moveCameraLeft() {
+        moveCamera(Vector3.left().scaled(cameraMovementStep))
+    }
+
+    fun moveCameraRight() {
+        moveCamera(Vector3.right().scaled(cameraMovementStep))
+    }
+
+    fun moveCameraForward() {
+        moveCamera(Vector3.forward().scaled(cameraMovementStep))
+    }
+
+    fun moveCameraBackward() {
+        moveCamera(Vector3.back().scaled(cameraMovementStep))
+    }
+
+    private fun moveCamera(direction: Vector3) {
+        postOnRenderThread {
+            val newPosition = Vector3.add(camera3D.worldPosition, direction)
+            camera3D.setPosition(newPosition)
         }
-        if (newCameraPosition.y > 2.0f) {
-            cameraMovesUpwards = false
-        } else if (newCameraPosition.y < -2.0f) {
-            cameraMovesUpwards = true
-        }
-        camera3D.setPosition(newCameraPosition)
     }
 }
 

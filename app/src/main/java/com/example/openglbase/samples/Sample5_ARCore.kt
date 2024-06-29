@@ -100,7 +100,14 @@ private fun UILayer(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        SessionStats(stats, fps, showingDepthMap, onToggleDepthMap, showingFeaturePoints, onToggleFeaturePoints)
+        SessionStats(
+            stats,
+            fps,
+            showingDepthMap,
+            onToggleDepthMap,
+            showingFeaturePoints,
+            onToggleFeaturePoints
+        )
         Toolbar(onDeleteLast)
     }
 }

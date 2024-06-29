@@ -75,7 +75,7 @@ private class Sample4Renderer(context: Context) : GLThreadedRenderer() {
     }
 
     private val camera3D = Camera3D().apply {
-        worldPosition.set(0.0f, 0.0f, 2.0f)
+        setPosition(Vector3(0.0f, 0.0f, 2.0f))
     }
 
     fun onClear() {

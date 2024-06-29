@@ -9,7 +9,7 @@ class Camera3D : Camera() {
         Orthographic
     }
 
-    private val front = Vector3.forward()
+    private var front = Vector3.forward()
 
     var projection = Projection.Perspective
         private set
@@ -40,6 +40,11 @@ class Camera3D : Camera() {
 
     fun setPosition(newPosition: Vector3) {
         worldPosition.set(newPosition)
+        updateViewMatrix()
+    }
+
+    fun setFront(newFront: Vector3) {
+        front = newFront
         updateViewMatrix()
     }
 
