@@ -75,6 +75,10 @@ class DepthImageRenderer(context: Context) {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE1)
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, depthColorPaletteTexture.id)
         backgroundRenderableMesh.render()
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE1)
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
     }
 
     /**
@@ -91,5 +95,6 @@ class DepthImageRenderer(context: Context) {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, depthTexture.id)
         backgroundRenderableMesh.render()
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
     }
 }

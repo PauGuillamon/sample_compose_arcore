@@ -61,5 +61,12 @@ class SceneOcclusionQuadRenderer(context: Context) {
             depthMapTexture!!.bind()
         }
         renderableQuad.render()
+
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
+        sceneColorTexture.unbind()
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE1)
+        sceneDepthTexture.unbind()
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE2)
+        depthMapTexture?.unbind()
     }
 }

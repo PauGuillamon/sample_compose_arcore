@@ -196,6 +196,7 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
             GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
             GLES30.glBindTexture(zoyaCubeGpuTexture.target, zoyaCubeGpuTexture.id)
             zoyaCubeRenderable.render()
+            GLES30.glBindTexture(zoyaCubeGpuTexture.target, 0)
         }
     }
 

@@ -55,25 +55,25 @@ class RenderableMesh {
 
     fun uploadToGPU() {
         val mesh = mesh ?: throw IllegalStateException("Mesh was not set.")
-        if (mesh.verticesBufferSize == 0 || mesh.indicesDataSize == 0) {
+        if (mesh.verticesBufferSize == 0 || mesh.indicesBufferSize == 0) {
             throw IllegalStateException("RenderableMesh was not set with Mesh data.")
         }
         if (VAO == 0) {
             throw IllegalStateException("RenderableMesh was not initialized.")
         }
 
-        GLES30.glBindVertexArray(VAO)
+        mesh.verticesBuffer.rewind()
+        mesh.indicesBuffer.rewind()
 
-        mesh.verticesData.rewind()
-        mesh.indicesData.rewind()
+        GLES30.glBindVertexArray(VAO)
 
         // Uploads vertex data to GPU
         GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, VBO)
-        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, mesh.verticesBufferSize, mesh.verticesData, GLES30.GL_STATIC_DRAW)
+        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, mesh.verticesBufferSize, mesh.verticesBuffer, GLES30.GL_STATIC_DRAW)
 
         // Uploads element indices to GPU
         GLES30.glBindBuffer(GLES30.GL_ELEMENT_ARRAY_BUFFER, EBO)
-        GLES30.glBufferData(GLES30.GL_ELEMENT_ARRAY_BUFFER, mesh.indicesDataSize, mesh.indicesData, GLES30.GL_STATIC_DRAW)
+        GLES30.glBufferData(GLES30.GL_ELEMENT_ARRAY_BUFFER, mesh.indicesBufferSize, mesh.indicesBuffer, GLES30.GL_STATIC_DRAW)
 
         val stride = 8 * Float.SIZE_BYTES
         // Sets up Buffer offsets to specific set of data
@@ -100,7 +100,7 @@ class RenderableMesh {
         val mesh = mesh ?: throw IllegalStateException("Mesh was not set.")
         if (!uploaded) throw IllegalStateException("Mesh was uploaded to GPU.")
         GLES30.glBindVertexArray(VAO)
-        GLES30.glDrawElements(primitive, mesh.indicesDataSize, GLES30.GL_UNSIGNED_INT, 0)
+        GLES30.glDrawElements(primitive, mesh.indicesCount, GLES30.GL_UNSIGNED_INT, 0)
         GLES30.glBindVertexArray(0)
         glHasError()
     }

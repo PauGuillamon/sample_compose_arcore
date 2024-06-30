@@ -241,7 +241,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         if (showDepthMap) {
             arCoreManager.renderDepthMap()
         } else {
-            renderFrame()
+            render()
         }
         onFrameFinished()
     }
@@ -260,7 +260,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         }
     }
 
-    private fun renderFrame() {
+    private fun render() {
         GLES30.glEnable(GLES30.GL_CULL_FACE)
         GLES30.glFrontFace(GLES30.GL_CCW)
         // 1. First render pass, renders the virtual scene into the virtualSceneFramebuffer.
@@ -332,6 +332,8 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(zoyaCubeGpuTexture.target, zoyaCubeGpuTexture.id)
         zoyaCubeRenderable.render()
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
+        GLES30.glBindTexture(zoyaCubeGpuTexture.target, 0)
     }
 
     companion object {

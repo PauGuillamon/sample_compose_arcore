@@ -37,5 +37,6 @@ class TextureQuadRenderer(context: Context) {
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         texture.bind()
         renderableQuad.render()
+        texture.unbind()
     }
 }

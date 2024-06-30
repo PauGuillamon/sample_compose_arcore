@@ -9,6 +9,7 @@ object Generator {
             0.0f, 1.0f
         ))
     }
+
     fun generateScreenQuad(texCoords: FloatArray): Mesh {
         if (texCoords.size < 8) {
             throw IllegalArgumentException("texCoords must have at least 8 elements, but got ${texCoords.size}")

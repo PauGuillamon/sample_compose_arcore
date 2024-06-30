@@ -7,41 +7,47 @@ import java.nio.IntBuffer
 
 class Mesh {
 
+    var verticesBuffer = FloatBuffer.allocate(0)
+        private set
     var verticesBufferSize = 0
        private set
-    var verticesData = FloatBuffer.allocate(0)
+
+    var indicesBuffer = IntBuffer.allocate(0)
         private set
-    var indicesDataSize = 0
+    var indicesBufferSize = 0
         private set
-    var indicesData = IntBuffer.allocate(0)
+    var indicesCount = 0
         private set
 
     fun copy(): Mesh {
         val newMesh = Mesh()
+        newMesh.verticesBuffer = verticesBuffer
         newMesh.verticesBufferSize = verticesBufferSize
-        newMesh.verticesData = verticesData
-        newMesh.indicesDataSize = indicesDataSize
-        newMesh.indicesData = indicesData
+
+        newMesh.indicesBuffer = indicesBuffer
+        newMesh.indicesBufferSize = indicesBufferSize
+        newMesh.indicesCount = indicesCount
         return newMesh
     }
 
     fun load(vertices: List<Vertex>, indices: List<VertexIndex>) {
         verticesBufferSize = vertices.size * Vertex.SIZE_BYTES
-        verticesData = ByteBuffer.allocateDirect(verticesBufferSize).order(ByteOrder.nativeOrder()).asFloatBuffer()
+        verticesBuffer = ByteBuffer.allocateDirect(verticesBufferSize).order(ByteOrder.nativeOrder()).asFloatBuffer()
         vertices.forEach {
-            verticesData.put(it.position.x)
-            verticesData.put(it.position.y)
-            verticesData.put(it.position.z)
-            verticesData.put(it.normal.x)
-            verticesData.put(it.normal.y)
-            verticesData.put(it.normal.z)
-            verticesData.put(it.texCoords.x)
-            verticesData.put(it.texCoords.y)
+            verticesBuffer.put(it.position.x)
+            verticesBuffer.put(it.position.y)
+            verticesBuffer.put(it.position.z)
+            verticesBuffer.put(it.normal.x)
+            verticesBuffer.put(it.normal.y)
+            verticesBuffer.put(it.normal.z)
+            verticesBuffer.put(it.texCoords.x)
+            verticesBuffer.put(it.texCoords.y)
         }
-        indicesDataSize = indices.size * VertexIndex.SIZE_BYTES
-        indicesData = ByteBuffer.allocateDirect(indicesDataSize).order(ByteOrder.nativeOrder()).asIntBuffer()
+        indicesCount = indices.size
+        indicesBufferSize = indices.size * VertexIndex.SIZE_BYTES
+        indicesBuffer = ByteBuffer.allocateDirect(indicesBufferSize).order(ByteOrder.nativeOrder()).asIntBuffer()
         indices.forEach {
-            indicesData.put(it)
+            indicesBuffer.put(it)
         }
     }
 }

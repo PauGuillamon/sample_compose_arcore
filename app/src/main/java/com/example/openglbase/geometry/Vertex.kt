@@ -5,8 +5,6 @@ import com.example.openglbase.math.Vector3
 
 typealias VertexIndex = Int
 
-public fun vertexIndices(vararg elements: VertexIndex): List<VertexIndex> = if (elements.size > 0) elements.asList() else emptyList()
-
 class Vertex(val position: Vector3, val normal: Vector3, val texCoords: Vector2) {
     class Builder {
         private var position = Vector3(0.0f, 0.0f, 0.0f)
