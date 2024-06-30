@@ -109,13 +109,19 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
     private lateinit var zoyaCubeGpuTexture: GPUTexture
 
     private val nodes = listOf(
-        createNode(Vector3(0.0f, 0.0f, -1.0f)),
-        createNode(Vector3(0.0f, 0.0f, -2.0f)),
-        createNode(Vector3(0.0f, 0.0f, -3.0f)),
+        createNode(Vector3( 0.0f, 0.0f, -1.0f)),
+        createNode(Vector3( 0.0f, 0.0f, -2.0f)),
+        createNode(Vector3( 0.0f, 0.0f, -4.0f)),
         createNode(Vector3(-1.0f, 0.0f, -2.0f)),
-        createNode(Vector3(+1.0f, 0.0f, -2.0f)),
         createNode(Vector3(-1.0f, 0.0f, -4.0f)),
+        createNode(Vector3(+1.0f, 0.0f, -2.0f)),
         createNode(Vector3(+1.0f, 0.0f, -4.0f)),
+        createNode(Vector3( 0.0f, 2.0f, -2.0f)),
+        createNode(Vector3( 0.0f, 2.0f, -4.0f)),
+        createNode(Vector3(-1.0f, 2.0f, -2.0f)),
+        createNode(Vector3(-1.0f, 2.0f, -4.0f)),
+        createNode(Vector3(+1.0f, 2.0f, -2.0f)),
+        createNode(Vector3(+1.0f, 2.0f, -4.0f)),
     )
 
     private fun createNode(position: Vector3): Node {
