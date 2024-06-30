@@ -43,8 +43,8 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
 
     private var viewportWidth = 0
     private var viewportHeight = 0
-    private var showDepthMap = false
     private var showFeaturePoints = false
+    private var showDepthMap = false
 
     /**
      * This Framebuffer will hold the virtual scene's color and depth.
@@ -161,15 +161,21 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         }
     }
 
+    fun showFeaturePoints(show: Boolean) {
+        postOnRenderThread {
+            showFeaturePoints = show
+        }
+    }
+
     fun showDepthMap(show: Boolean) {
         postOnRenderThread {
             showDepthMap = show
         }
     }
 
-    fun showFeaturePoints(show: Boolean) {
+    fun enableEIS(enable: Boolean) {
         postOnRenderThread {
-            showFeaturePoints = show
+            arCoreManager.enableEIS(enable)
         }
     }
 
@@ -238,7 +244,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
 
     override fun onThreadedDrawFrame() {
         update()
-        if (showDepthMap) {
+        if (showDepthMap && arCoreManager.depthApiSupported) {
             arCoreManager.renderDepthMap()
         } else {
             render()

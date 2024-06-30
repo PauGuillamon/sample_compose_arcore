@@ -3,20 +3,19 @@ package com.example.openglbase.arcoreutils
 import android.content.Context
 import android.opengl.GLES30
 import com.example.openglbase.geometry.Generator
+import com.example.openglbase.geometry.Mesh
 import com.example.openglbase.opengl.GPUTexture
 import com.example.openglbase.opengl.RenderableMesh
 import com.example.openglbase.opengl.ShaderProgram
 import com.example.openglbase.opengl.glHasError
 import com.example.openglbase.utils.ShaderReader
 import com.example.openglbase.utils.loadImage
-import com.google.ar.core.Coordinates2d
-import com.google.ar.core.Frame
 
 class DepthImageRenderer(context: Context) {
 
     private val backgroundShader = ShaderProgram(
-        ShaderReader.readShader(context, "shaders/depth_api/depth_map.vert"),
-        ShaderReader.readShader(context, "shaders/depth_api/depth_map.frag")
+        ShaderReader.readShader(context, "shaders/camera_image.vert"),
+        ShaderReader.readShader(context, "shaders/arcore_utils/depth_map.frag")
     )
 
     val backgroundRenderableMesh = RenderableMesh().apply {
@@ -25,6 +24,8 @@ class DepthImageRenderer(context: Context) {
 
     private val depthColorPaletteBitmap = loadImage(context.assets, "textures/depth_color_palette.png", false)
     private lateinit var depthColorPaletteTexture: GPUTexture
+
+    private var use3DCoords = false
 
     fun initializeGPU() {
         backgroundRenderableMesh.initializeGPU()
@@ -47,29 +48,16 @@ class DepthImageRenderer(context: Context) {
         glHasError("DepthImageRenderer initializeGPU")
     }
 
-    fun update(frame: Frame) {
-        if (frame.hasDisplayGeometryChanged()) {
-            val verticesNdc = floatArrayOf(
-                -1f, -1f,
-                +1f, -1f,
-                +1f, +1f,
-                -1f, +1f
-            )
-            val texCoords = FloatArray(8)
-            frame.transformCoordinates2d(
-                Coordinates2d.OPENGL_NORMALIZED_DEVICE_COORDINATES,
-                verticesNdc,
-                Coordinates2d.TEXTURE_NORMALIZED,
-                texCoords
-            )
-            backgroundRenderableMesh.updateGpuMesh(Generator.generateScreenQuad(texCoords))
-        }
+    fun updateMesh(mesh: Mesh, using3DCoords: Boolean) {
+        use3DCoords = using3DCoords
+        backgroundRenderableMesh.updateGpuMesh(mesh)
     }
 
     fun render(depthTexture: GPUTexture) {
         GLES30.glDisable(GLES30.GL_DEPTH_TEST)
         backgroundShader.use()
         backgroundShader.setBoolUniform("uDepthRawData", false)
+        backgroundShader.setBoolUniform("uUseTexCoords3D", use3DCoords)
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, depthTexture.id)
         GLES30.glActiveTexture(GLES30.GL_TEXTURE1)
@@ -92,6 +80,7 @@ class DepthImageRenderer(context: Context) {
         GLES30.glDisable(GLES30.GL_DEPTH_TEST)
         backgroundShader.use()
         backgroundShader.setBoolUniform("uDepthRawData", true)
+        backgroundShader.setBoolUniform("uUseTexCoords3D", use3DCoords)
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, depthTexture.id)
         backgroundRenderableMesh.render()

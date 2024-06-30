@@ -19,12 +19,15 @@ class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -
     var fps by mutableStateOf("0")
         private set
 
+    var showingFeaturePoints by mutableStateOf(false)
+        private set
     var showingDepthMap by mutableStateOf(false)
         private set
-    var showingFeaturePoints by mutableStateOf(false)
+    var eisEnabled by mutableStateOf(false)
         private set
 
     private var depthApiSupported = false
+    private var eisSupported = false
     var arCoreStats by mutableStateOf("")
         private set
 
@@ -51,14 +54,27 @@ class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -
         glRenderer.deleteLast()
     }
 
-    fun toggleDepthMap(show: Boolean) {
-        showingDepthMap = show
-        glRenderer.showDepthMap(show)
-    }
-
     fun toggleFeaturePoints(show: Boolean) {
         showingFeaturePoints = show
         glRenderer.showFeaturePoints(show)
+    }
+
+    fun toggleDepthMap(show: Boolean) {
+        if (depthApiSupported) {
+            showingDepthMap = show
+            glRenderer.showDepthMap(show)
+        } else {
+            showingDepthMap = false
+        }
+    }
+
+    fun toggleEIS(enabled: Boolean) {
+        if (eisSupported) {
+            eisEnabled = enabled
+            glRenderer.enableEIS(enabled)
+        } else {
+            eisEnabled = false
+        }
     }
 
     fun cameraPermissionWasGranted() {
@@ -80,16 +96,16 @@ class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -
     }
 
     private fun onArCoreSessionCreated() {
-        if (glRenderer.arCoreManager.depthApiSupported != depthApiSupported) {
-            depthApiSupported = glRenderer.arCoreManager.depthApiSupported
-            updateStats()
-        }
+        depthApiSupported = glRenderer.arCoreManager.depthApiSupported
+        eisSupported = glRenderer.arCoreManager.eisSupported
+        updateStats()
     }
 
     private fun updateStats() {
         arCoreStats = StringBuilder()
-            .append("ARCore stats:\n")
-            .append("\tDepth API: $depthApiSupported")
+            .append("ARCore features:\n")
+            .append("\tDepth API: $depthApiSupported\n")
+            .append("\tEIS: $eisSupported")
             .toString()
     }
 

@@ -61,16 +61,19 @@ fun Sample5_ARCore(
             // Important to make the lambdas as "remember" to avoid recompositions.
             // Alternatively we can enable Compose's strong skipping mode
             val deleteLastLambda = remember { { viewModel.deleteLast() } }
-            val toggleDepthMapLambda = remember { { enabled: Boolean -> viewModel.toggleDepthMap(enabled) } }
             val toggleFeaturePointsLambda = remember { { enabled: Boolean -> viewModel.toggleFeaturePoints(enabled) } }
+            val toggleDepthMapLambda = remember { { enabled: Boolean -> viewModel.toggleDepthMap(enabled) } }
+            val toggleEisLambda = remember { { enabled: Boolean -> viewModel.toggleEIS(enabled) } }
             UILayer(
                 stats = viewModel.arCoreStats,
                 fps = viewModel.fps,
                 onDeleteLast = deleteLastLambda,
+                showingFeaturePoints = viewModel.showingFeaturePoints,
+                onToggleFeaturePoints = toggleFeaturePointsLambda,
                 showingDepthMap = viewModel.showingDepthMap,
                 onToggleDepthMap = toggleDepthMapLambda,
-                showingFeaturePoints = viewModel.showingFeaturePoints,
-                onToggleFeaturePoints = toggleFeaturePointsLambda
+                eisEnabled = viewModel.eisEnabled,
+                onToggleEis = toggleEisLambda,
             )
         }
     }
@@ -91,10 +94,12 @@ private fun UILayer(
     stats: String,
     fps: String,
     onDeleteLast: () -> Unit,
-    showingDepthMap: Boolean,
-    onToggleDepthMap: (Boolean) -> Unit,
     showingFeaturePoints: Boolean,
     onToggleFeaturePoints: (Boolean) -> Unit,
+    showingDepthMap: Boolean,
+    onToggleDepthMap: (Boolean) -> Unit,
+    eisEnabled: Boolean,
+    onToggleEis: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -104,10 +109,12 @@ private fun UILayer(
         SessionStats(
             stats,
             fps,
+            showingFeaturePoints,
+            onToggleFeaturePoints,
             showingDepthMap,
             onToggleDepthMap,
-            showingFeaturePoints,
-            onToggleFeaturePoints
+            eisEnabled,
+            onToggleEis
         )
         Toolbar(onDeleteLast)
     }
@@ -117,10 +124,12 @@ private fun UILayer(
 private fun SessionStats(
     stats: String,
     fps: String,
-    showingDepthMap: Boolean,
-    onToggleDepthMap: (Boolean) -> Unit,
     showingFeaturePoints: Boolean,
     onToggleFeaturePoints: (Boolean) -> Unit,
+    showingDepthMap: Boolean,
+    onToggleDepthMap: (Boolean) -> Unit,
+    eisEnabled: Boolean,
+    onToggleEis: (Boolean) -> Unit,
 ) {
     Surface(
         modifier = Modifier
@@ -135,8 +144,9 @@ private fun SessionStats(
         ) {
             Text(text = stats)
             Text(text = stringResource(id = R.string.sample5_fps, fps))
-            TextCheckbox(stringResource(R.string.sample5_depth_map), showingDepthMap, onToggleDepthMap)
-            TextCheckbox(stringResource(R.string.sample5_feature_points), showingFeaturePoints, onToggleFeaturePoints)
+            TextCheckbox(stringResource(R.string.sample5_toggle_feature_points), showingFeaturePoints, onToggleFeaturePoints)
+            TextCheckbox(stringResource(R.string.sample5_toggle_depth_map), showingDepthMap, onToggleDepthMap)
+            TextCheckbox(stringResource(R.string.sample5_toggle_eis), eisEnabled, onToggleEis)
         }
     }
 }
@@ -174,8 +184,9 @@ private fun Preview() {
     }
     OpenGLBaseTheme {
         val fps = remember { derivedStateOf { fpsCount.intValue.toString() } }
-        var showingDepthMap by remember { mutableStateOf(false) }
         var showingFeaturePoints by remember { mutableStateOf(true) }
+        var showingDepthMap by remember { mutableStateOf(false) }
+        var eisEnabled by remember { mutableStateOf(false) }
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             UILayer(
                 stats = "Depth API: true",
@@ -183,14 +194,18 @@ private fun Preview() {
                 onDeleteLast = {
                     fpsCount.intValue = 0
                 },
+                showingFeaturePoints = showingFeaturePoints,
+                onToggleFeaturePoints = {
+                    showingFeaturePoints = !showingFeaturePoints
+                },
                 showingDepthMap = showingDepthMap,
                 onToggleDepthMap = {
                     showingDepthMap = !showingDepthMap
                 },
-                showingFeaturePoints = showingFeaturePoints,
-                onToggleFeaturePoints = {
-                    showingFeaturePoints = !showingFeaturePoints
-                }
+                eisEnabled = eisEnabled,
+                onToggleEis = {
+                    eisEnabled = !eisEnabled
+                },
             )
         }
     }

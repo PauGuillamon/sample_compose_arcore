@@ -239,7 +239,7 @@ private fun MainScreenContent(
         }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(top = 60.dp),
+            contentPadding = PaddingValues(top = 60.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

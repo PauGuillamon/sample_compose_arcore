@@ -2,7 +2,7 @@
 
 precision mediump float;
 
-#include "shaders/depth_api/depthutils.frag"
+#include "shaders/arcore_utils/depthutils.frag"
 
 uniform sampler2D uSceneColorTexture;
 uniform sampler2D uSceneDepthTexture;

@@ -3,12 +3,15 @@ package com.example.openglbase.arcoreutils
 import android.content.Context
 import android.opengl.GLES30
 import android.util.Size
+import com.example.openglbase.geometry.Generator
 import com.example.openglbase.opengl.GPUTexture
 import com.example.openglbase.scene.Camera3D
 import com.example.openglbase.utils.Logger
 import com.google.ar.core.CameraConfig
 import com.google.ar.core.CameraConfigFilter
 import com.google.ar.core.Config
+import com.google.ar.core.Coordinates2d
+import com.google.ar.core.Coordinates3d
 import com.google.ar.core.Frame
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.NotYetAvailableException
@@ -29,6 +32,12 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
         private set
     var depthApiSupported = false
         private set
+    var eisSupported = false
+        private set
+    var eisEnabled = false
+        private set
+
+    private var forceUpdateCameraCoords2D = true
 
     private var arCoreSessionResumed = false
     private var firstTimeResume = true
@@ -71,6 +80,19 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
         cameraPermissionGranted.set(true)
     }
 
+    fun enableEIS(enable: Boolean) {
+        if (eisSupported && enable != eisEnabled) {
+            arCoreSession?.let {
+                val newMode = if (enable) Config.ImageStabilizationMode.EIS else Config.ImageStabilizationMode.OFF
+                val config = it.config
+                config.imageStabilizationMode = newMode
+                it.configure(config)
+            }
+            eisEnabled = arCoreSession?.config?.imageStabilizationMode == Config.ImageStabilizationMode.EIS
+            forceUpdateCameraCoords2D = (enable == false)
+        }
+    }
+
     fun update(context: Context, onFrameAvailable: (Frame) -> Unit) {
         ensureArCoreSessionCreated(context)
         arCoreSession?.let { arCoreSession ->
@@ -85,8 +107,7 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
                 if (depthApiSupported) {
                     updateDepth(newFrame)
                 }
-                cameraImageRenderer.update(newFrame)
-                depthImageRenderer.update(newFrame)
+                updateCameraCoords(newFrame)
                 pointCloudRenderer.update(newFrame)
                 onFrameAvailable(newFrame)
             }
@@ -158,6 +179,7 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
                     session.cameraConfig = it
                 }
             })
+            eisSupported = session.isImageStabilizationModeSupported(Config.ImageStabilizationMode.EIS)
             arCoreSession = session
             onArCoreSessionCreated()
         }
@@ -209,8 +231,65 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
             hasDepthData = true
             depthImage.close()
         } catch (_: NotYetAvailableException) {
-            // Normal exception from ARCore - happens usually in the first frames.
+            // Normal exception from ARCore - happens usually during the first frames.
         }
+    }
+
+    private fun updateCameraCoords(frame: Frame) {
+        if (eisEnabled) {
+            // When EIS is enabled, the camera coords might change every frame.
+            updateCoords3D(frame)
+        } else if (frame.hasDisplayGeometryChanged() || forceUpdateCameraCoords2D) {
+            updateCoords2D(frame)
+            forceUpdateCameraCoords2D = false
+        }
+    }
+
+    private fun updateCoords3D(frame: Frame) {
+        val verticesNdc = floatArrayOf(
+            -1f, -1f,
+            +1f, -1f,
+            +1f, +1f,
+            -1f, +1f
+        )
+        val coords3D = FloatArray(4 * 3)
+        frame.transformCoordinates3d(
+            Coordinates2d.OPENGL_NORMALIZED_DEVICE_COORDINATES,
+            verticesNdc,
+            Coordinates3d.EIS_NORMALIZED_DEVICE_COORDINATES,
+            coords3D
+        )
+        val texCoords3D = FloatArray(4 * 3)
+        frame.transformCoordinates3d(
+            Coordinates2d.OPENGL_NORMALIZED_DEVICE_COORDINATES,
+            verticesNdc,
+            Coordinates3d.EIS_TEXTURE_NORMALIZED,
+            texCoords3D
+        )
+
+        // Using the Normals attributes as 3D texCoords because our texCoords in [Vertex] is a Vector2.
+        val mesh = Generator.generateScreenQuad(coords3D = coords3D, normals = texCoords3D)
+        cameraImageRenderer.updateMesh(mesh, true)
+        depthImageRenderer.updateMesh(mesh, true)
+    }
+
+    private fun updateCoords2D(frame: Frame) {
+        val verticesNdc = floatArrayOf(
+            -1f, -1f,
+            +1f, -1f,
+            +1f, +1f,
+            -1f, +1f
+        )
+        val texCoords = FloatArray(8)
+        frame.transformCoordinates2d(
+            Coordinates2d.OPENGL_NORMALIZED_DEVICE_COORDINATES,
+            verticesNdc,
+            Coordinates2d.TEXTURE_NORMALIZED,
+            texCoords
+        )
+        val mesh = Generator.generateScreenQuad(texCoords = texCoords)
+        cameraImageRenderer.updateMesh(mesh, false)
+        depthImageRenderer.updateMesh(mesh, false)
     }
 
     companion object {

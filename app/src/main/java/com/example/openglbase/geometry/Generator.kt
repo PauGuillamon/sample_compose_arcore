@@ -1,16 +1,18 @@
 package com.example.openglbase.geometry
 
 object Generator {
-    fun generateScreenQuad(): Mesh {
-        return generateScreenQuad(floatArrayOf(
-            0.0f, 0.0f,
-            1.0f, 0.0f,
-            1.0f, 1.0f,
-            0.0f, 1.0f
-        ))
-    }
 
-    fun generateScreenQuad(texCoords: FloatArray): Mesh {
+    fun generateScreenQuad(
+        coords3D: FloatArray = defaultQuadCoords3D(),
+        normals: FloatArray = defaultQuadNormals(),
+        texCoords: FloatArray = defaultQuadTexCoords()
+    ): Mesh {
+        if (coords3D.size < 12) {
+            throw IllegalArgumentException("texCoords must have at least 12 elements, but got ${coords3D.size}")
+        }
+        if (normals.size < 12) {
+            throw IllegalArgumentException("texCoords must have at least 12 elements, but got ${normals.size}")
+        }
         if (texCoords.size < 8) {
             throw IllegalArgumentException("texCoords must have at least 8 elements, but got ${texCoords.size}")
         }
@@ -18,10 +20,10 @@ object Generator {
         val indices = mutableListOf<VertexIndex>()
 
         vertices.addAll(listOf(
-            Vertex.Builder().position(-1.0f, -1.0f, 0.0f).normal(0.0f, 0.0f, 1.0f).texCoords(texCoords[0], texCoords[1]).build(),
-            Vertex.Builder().position(+1.0f, -1.0f, 0.0f).normal(0.0f, 0.0f, 1.0f).texCoords(texCoords[2], texCoords[3]).build(),
-            Vertex.Builder().position(+1.0f, +1.0f, 0.0f).normal(0.0f, 0.0f, 1.0f).texCoords(texCoords[4], texCoords[5]).build(),
-            Vertex.Builder().position(-1.0f, +1.0f, 0.0f).normal(0.0f, 0.0f, 1.0f).texCoords(texCoords[6], texCoords[7]).build()
+            Vertex.Builder().position(coords3D[0], coords3D[1], coords3D[2]).normal(normals[0], normals[1], normals[2]).texCoords(texCoords[0], texCoords[1]).build(),
+            Vertex.Builder().position(coords3D[3], coords3D[4], coords3D[5]).normal(normals[3], normals[4], normals[5]).texCoords(texCoords[2], texCoords[3]).build(),
+            Vertex.Builder().position(coords3D[6], coords3D[7], coords3D[8]).normal(normals[6], normals[7], normals[8]).texCoords(texCoords[4], texCoords[5]).build(),
+            Vertex.Builder().position(coords3D[9], coords3D[10], coords3D[11]).normal(normals[9], normals[10], normals[11]).texCoords(texCoords[6], texCoords[7]).build()
         ))
         indices.addAll(listOf(
             0, 1, 2,
@@ -33,12 +35,32 @@ object Generator {
         return mesh
     }
 
+    private fun defaultQuadCoords3D(): FloatArray = floatArrayOf(
+        -1.0f, -1.0f, 0.0f,
+        +1.0f, -1.0f, 0.0f,
+        +1.0f, +1.0f, 0.0f,
+        -1.0f, +1.0f, 0.0f
+    )
+
+    private fun defaultQuadNormals(): FloatArray = floatArrayOf(
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f
+    )
+
+    private fun defaultQuadTexCoords(): FloatArray = floatArrayOf(
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+    )
+
     fun generateCube(size: Float): Mesh {
         return generatePrism(size, size, size)
     }
 
     fun generatePrism(width: Float, height: Float, depth: Float): Mesh {
-
         val halfWidth = width / 2.0f
         val halfHeight = height / 2.0f
         val halfDepth = depth / 2.0f

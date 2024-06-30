@@ -13,8 +13,9 @@
     <string name="sample4_description">This sample integreates howing the camera feed from ARCore. There is a rotating cube floating as an overlay but it is not an Augmented Reality experience.</string>
     <string name="sample5_description">Full sample integrating ARCore and placing more cubes in the real world. The cubes are occluded when they appear behind a real world object.</string>
     <string name="sample5_fps">FPS: %1s</string>
-    <string name="sample5_depth_map">Depth Map</string>
-    <string name="sample5_feature_points">Feature points</string>
+    <string name="sample5_toggle_feature_points">Feature points</string>
+    <string name="sample5_toggle_depth_map">Depth Map</string>
+    <string name="sample5_toggle_eis">EIS</string>
     <string name="sample5_delete_last">Delete last</string>
 
     <string name="camera_permission_rationale">Without the camera permission, this project cannot execute the AR experience.</string>

@@ -4,18 +4,17 @@ import android.content.Context
 import android.opengl.GLES11Ext
 import android.opengl.GLES30
 import com.example.openglbase.geometry.Generator
+import com.example.openglbase.geometry.Mesh
 import com.example.openglbase.opengl.GPUTexture
 import com.example.openglbase.opengl.RenderableMesh
 import com.example.openglbase.opengl.ShaderProgram
 import com.example.openglbase.opengl.glHasError
 import com.example.openglbase.utils.ShaderReader
-import com.google.ar.core.Coordinates2d
-import com.google.ar.core.Frame
 
 class CameraImageRenderer(context: Context) {
     private val backgroundShader = ShaderProgram(
-        ShaderReader.readShader(context, "shaders/external_OES_quad.vert"),
-        ShaderReader.readShader(context, "shaders/external_OES_quad.frag")
+        ShaderReader.readShader(context, "shaders/camera_image.vert"),
+        ShaderReader.readShader(context, "shaders/camera_image.frag")
     )
 
     private val backgroundRenderableMesh = RenderableMesh().apply {
@@ -25,6 +24,8 @@ class CameraImageRenderer(context: Context) {
     // ARCore will output the camera image into the memory held by this texture.
     lateinit var texture: GPUTexture
         private set
+
+    private var use3DCoords = false
 
     fun initializeGPU() {
         texture = GPUTexture(
@@ -45,30 +46,18 @@ class CameraImageRenderer(context: Context) {
         glHasError("CameraImageRenderer initializeGPU")
     }
 
-    fun update(frame: Frame) {
-        if (frame.hasDisplayGeometryChanged()) {
-            val verticesNdc = floatArrayOf(
-                -1f, -1f,
-                +1f, -1f,
-                +1f, +1f,
-                -1f, +1f
-            )
-            val texCoords = FloatArray(8)
-            frame.transformCoordinates2d(
-                Coordinates2d.OPENGL_NORMALIZED_DEVICE_COORDINATES,
-                verticesNdc,
-                Coordinates2d.TEXTURE_NORMALIZED,
-                texCoords
-            )
-            backgroundRenderableMesh.updateGpuMesh(Generator.generateScreenQuad(texCoords))
-        }
+    fun updateMesh(mesh: Mesh, using3DCoords: Boolean) {
+        use3DCoords = using3DCoords
+        backgroundRenderableMesh.updateGpuMesh(mesh)
     }
 
     fun render() {
         GLES30.glDisable(GLES30.GL_DEPTH_TEST)
         backgroundShader.use()
+        backgroundShader.setBoolUniform("uUseTexCoords3D", use3DCoords)
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture.id)
         backgroundRenderableMesh.render()
+        GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0)
     }
 }

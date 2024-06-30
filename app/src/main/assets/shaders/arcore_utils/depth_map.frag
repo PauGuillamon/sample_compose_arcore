@@ -2,13 +2,14 @@
 
 precision mediump float;
 
-#include "shaders/depth_api/depthutils.frag"
+#include "shaders/arcore_utils/depthutils.frag"
+#include "shaders/arcore_utils/eis.frag"
 
 uniform sampler2D uDepthTexture;
 uniform sampler2D uDepthColorPaletteTexture;
 uniform bool uDepthRawData;
 
-in vec2 vTexCoords;
+in vec3 vTexCoords;
 
 out vec4 fragColor;
 
@@ -35,15 +36,17 @@ float GetDepthMapColorPalette(float depthMillimeters) {
 }
 
 void main() {
+    vec2 texCoords = TransformTexCoords(vTexCoords);
+
     // Might be more performant to split this shader into two different
     // shaders to avoid this unneeded branching.
     if (uDepthRawData) {
-        vec2 packedDepthAndVisibility = texture(uDepthTexture, vTexCoords).xy;
+        vec2 packedDepthAndVisibility = texture(uDepthTexture, texCoords).xy;
         fragColor.rg = packedDepthAndVisibility;
         fragColor.b = 0.0;
         fragColor.a = 0.0;
     } else {
-        float depthMillimeters = DepthGetMillimeters(uDepthTexture, vTexCoords);
+        float depthMillimeters = DepthGetMillimeters(uDepthTexture, texCoords);
         float colorPaletteCoord = GetDepthMapColorPalette(depthMillimeters);
         vec3 color = texture(uDepthColorPaletteTexture, vec2(colorPaletteCoord, 0.0)).rgb;
         fragColor = vec4(color, 1.0);
