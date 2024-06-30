@@ -42,7 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -142,7 +141,7 @@ private fun MainScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            MainScreenContent(arCoreSupportedAndUpdated, onNavigateTo, onInstallArCore)
+            MainScreenContent(arCoreSupportedAndUpdated, onNavigateTo, onInstallArCore, Modifier.padding(top = 8.dp))
             if (infoOpen) {
                 DialogCard(onDismissRequest = { infoOpen = !infoOpen }) {
                     Text(
@@ -194,11 +193,12 @@ private fun DialogCard(onDismissRequest: () -> Unit, content: @Composable () -> 
 private fun TopBar(onInfoClick: () -> Unit) {
     Surface(
         modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .padding(16.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_info_outline_24),
@@ -214,23 +214,25 @@ private fun TopBar(onInfoClick: () -> Unit) {
 private fun MainScreenContent(
     arCoreSupportedAndUpdated: ArCoreInstallationState,
     onNavigateTo: (NavRoute) -> Unit,
-    onInstallArCore: () -> Unit
+    onInstallArCore: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Text(
             text = stringResource(R.string.app_title),
-            fontSize = 30.sp,
+            style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         Text(
             text = stringResource(R.string.session_title),
-            fontSize = 24.sp,
+            style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         if (arCoreSupportedAndUpdated == ArCoreInstallationState.UNINSTALLED_OR_TOO_OLD) {
             Button(onClick = onInstallArCore) {
