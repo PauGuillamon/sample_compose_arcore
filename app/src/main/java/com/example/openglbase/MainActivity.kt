@@ -47,7 +47,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.openglbase.compose.TextCheckbox
-import com.example.openglbase.samples.Sample1_ComposableOpenGLView
+import com.example.openglbase.samples.Sample1_OpenGLViewBasic
 import com.example.openglbase.samples.Sample2_MultipleGLViews
 import com.example.openglbase.samples.Sample3_BasicScene
 import com.example.openglbase.samples.Sample4_BackgroundCamera
@@ -56,7 +56,7 @@ import com.example.openglbase.ui.theme.OpenGLBaseTheme
 import com.google.ar.core.ArCoreApk
 
 private enum class NavRoute(val route: String, val arCoreDependency: Boolean, @StringRes val description: Int) {
-    Sample1("Sample OpenGL setup", false, R.string.sample1_description),
+    Sample1("Sample OpenGL basic", false, R.string.sample1_description),
     Sample2("Sample multiple GL views", false, R.string.sample2_description),
     Sample3("Sample basic scene", false, R.string.sample3_description),
     Sample4("Sample background camera", true, R.string.sample4_description),
@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
                             onInstallArCore = { onInstallArCore() }
                         )
                     }
-                    composable(NavRoute.Sample1.route) { Sample1_ComposableOpenGLView() }
+                    composable(NavRoute.Sample1.route) { Sample1_OpenGLViewBasic() }
                     composable(NavRoute.Sample2.route) { Sample2_MultipleGLViews() }
                     composable(NavRoute.Sample3.route) { Sample3_BasicScene() }
                     composable(NavRoute.Sample4.route) { Sample4_BackgroundCamera() }
