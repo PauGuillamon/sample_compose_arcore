@@ -10,6 +10,8 @@ import com.example.openglbase.compose.GLThreadedRenderer
 import com.example.openglbase.compose.OpenGLView
 import com.example.openglbase.ui.theme.OpenGLBaseTheme
 
+
+
 @Composable
 fun Sample1_ComposableOpenGLView() {
     OpenGLView(
@@ -17,6 +19,11 @@ fun Sample1_ComposableOpenGLView() {
         modifier = Modifier.fillMaxSize()
     )
 }
+
+
+
+
+
 
 private class Sample1Renderer : GLThreadedRenderer() {
     override val listenToTouchEvents: Boolean = false
@@ -42,6 +49,9 @@ private class Sample1Renderer : GLThreadedRenderer() {
         }
     }
 }
+
+
+
 
 @Preview
 @Composable

@@ -39,6 +39,8 @@ import com.example.openglbase.ui.theme.OpenGLBaseTheme
 import com.example.openglbase.utils.ShaderReader
 import com.example.openglbase.utils.loadImage
 
+
+
 @Composable
 fun Sample3_BasicScene() {
     val context = LocalContext.current
@@ -49,8 +51,11 @@ fun Sample3_BasicScene() {
             .fillMaxSize()
     )
     ArrowControls(renderer)
-
 }
+
+
+
+
 
 /**
  * Very simple arrow controls to control the position of the camera.
@@ -92,6 +97,11 @@ private fun ImageButton(@DrawableRes id: Int, onClick: () -> Unit) {
         )
     }
 }
+
+
+
+
+
 
 private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
     override val listenToTouchEvents: Boolean = false
