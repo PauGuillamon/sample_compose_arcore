@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenGLBase</string>
+    <string name="app_name">Sample Compose ARCore</string>
     <string name="app_title">Droidcon Berlin 2024</string>
     <string name="session_title">Building an AR app with Compose &amp; OpenGL ES</string>
     <string name="project_description">This project showcases how to integrate OpenGL ES rendering with Jetpack Compose. The different samples go from more basic to more complex integrating ARCore.\n\n\nThis project has been created by Pau Guillamon for the Droidcon Berlin 2024 conference.</string>

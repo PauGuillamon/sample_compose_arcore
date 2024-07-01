@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OpenGLBase"
+rootProject.name = "Sample Compose ARCore"
 include(":app")

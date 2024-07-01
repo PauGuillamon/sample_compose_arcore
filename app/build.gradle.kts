@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.openglbase"
+    namespace = "com.example.samplecomposearcore"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.openglbase"
+        applicationId = "com.example.samplecomposearcore"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
