@@ -238,14 +238,14 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
     private fun updateCameraCoords(frame: Frame) {
         if (eisEnabled) {
             // When EIS is enabled, the camera coords might change every frame.
-            updateCoords3D(frame)
+            updateCameraCoords3D(frame)
         } else if (frame.hasDisplayGeometryChanged() || forceUpdateCameraCoords2D) {
-            updateCoords2D(frame)
+            updateCameraCoords2D(frame)
             forceUpdateCameraCoords2D = false
         }
     }
 
-    private fun updateCoords3D(frame: Frame) {
+    private fun updateCameraCoords3D(frame: Frame) {
         val verticesNdc = floatArrayOf(
             -1f, -1f,
             +1f, -1f,
@@ -273,7 +273,7 @@ class ARCoreManager(context: Context, val onArCoreSessionCreated: () -> Unit) {
         depthImageRenderer.updateMesh(mesh, true)
     }
 
-    private fun updateCoords2D(frame: Frame) {
+    private fun updateCameraCoords2D(frame: Frame) {
         val verticesNdc = floatArrayOf(
             -1f, -1f,
             +1f, -1f,

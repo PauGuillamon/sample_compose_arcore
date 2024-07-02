@@ -48,7 +48,10 @@ fun Sample4_BackgroundCamera() {
                 lifecycleOwner.lifecycle.removeObserver(observer)
             }
         }
-        OpenGLView(glThreadedRenderer = renderer, modifier = Modifier.fillMaxSize())
+        OpenGLView(
+            glThreadedRenderer = renderer,
+            modifier = Modifier.fillMaxSize()
+        )
         CameraPermission {
             renderer.cameraPermissionWasGranted()
         }

@@ -146,7 +146,7 @@ fun OpenGLView(
             view
         },
         onRelease = {
-            Logger.LogError(TAG, "OpenGLView AndroidView onRelease")
+            Logger.LogInfo(TAG, "OpenGLView AndroidView onRelease")
             rendererHolder.onPause()
         }
     )

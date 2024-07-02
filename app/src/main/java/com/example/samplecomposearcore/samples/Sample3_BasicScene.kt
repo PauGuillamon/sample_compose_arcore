@@ -47,8 +47,7 @@ fun Sample3_BasicScene() {
     val renderer = remember { Sample3Renderer(context) }
     OpenGLView(
         glThreadedRenderer = renderer,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     )
     ArrowControls(renderer)
 }
