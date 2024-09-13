@@ -1,16 +1,16 @@
 [versions]
-agp = "8.5.0"
-kotlin = "2.0.0"
+agp = "8.5.2"
+kotlin = "2.0.10"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycle = "2.8.2"
-activityCompose = "1.9.0"
-composeBom = "2024.06.00"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycle = "2.8.5"
+activityCompose = "1.9.2"
+composeBom = "2024.09.01"
 google-accompanist = "0.34.0" # Need to be kept in sync with compose's version
-arcore = "1.43.0"
-navigationCompose = "2.7.7"
+arcore = "1.45.0"
+navigationCompose = "2.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
