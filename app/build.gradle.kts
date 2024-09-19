@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.arcore)
     implementation(libs.google.accompanist.permissions)
+    implementation(libs.javagl.obj)
 
     testImplementation(libs.junit)
 

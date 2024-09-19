@@ -3,6 +3,7 @@ package com.example.samplecomposearcore.opengl
 import android.opengl.GLES30
 import android.util.Log
 import com.example.samplecomposearcore.math.Matrix
+import com.example.samplecomposearcore.math.Vector3
 import com.example.samplecomposearcore.utils.Logger
 
 class ShaderProgram(private val vertexShaderCode: String, private val fragmentShaderCode: String) {
@@ -58,6 +59,13 @@ class ShaderProgram(private val vertexShaderCode: String, private val fragmentSh
         val uniformLocation = GLES30.glGetUniformLocation(id, uniformName)
         if (uniformLocation >= 0) {
             GLES30.glUniformMatrix4fv(uniformLocation, 1, false, matrix.data, 0)
+        }
+    }
+
+    fun setVector3Uniform(uniformName: String, value: Vector3) {
+        val uniformLocation = GLES30.glGetUniformLocation(id, uniformName)
+        if (uniformLocation >= 0) {
+            GLES30.glUniform3f(uniformLocation, value.x, value.y, value.z)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.samplecomposearcore.utils
 
 import android.content.Context
+import android.content.res.AssetManager
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -14,7 +15,12 @@ object ShaderReader {
      */
     @Throws(IOException::class)
     fun readShader(context: Context, filename: String): String {
-        context.assets.open(filename).use { inputStream ->
+        return readShader(context.assets, filename)
+    }
+
+    @Throws(IOException::class)
+    fun readShader(assetManager: AssetManager, filename: String): String {
+        assetManager.open(filename).use { inputStream ->
             BufferedReader(InputStreamReader(inputStream)).use { reader ->
                 val sb = StringBuilder()
                 var line = reader.readLine()
@@ -26,7 +32,7 @@ object ShaderReader {
                         if (includeFilename == filename) {
                             throw IOException("Do not include the calling file.")
                         }
-                        sb.append(readShader(context, includeFilename))
+                        sb.append(readShader(assetManager, includeFilename))
                     } else {
                         sb.append(line).append("\n")
                     }
