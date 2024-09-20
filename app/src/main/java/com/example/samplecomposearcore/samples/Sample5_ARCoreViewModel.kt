@@ -5,8 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.samplecomposearcore.compose.GLThreadedRenderer
 import com.example.samplecomposearcore.utils.Logger
+import com.example.samplecomposearcore.utils.loadModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -> Unit) : ViewModel() {
     private val glRenderer = Sample5_ARCoreRenderer(context) {
@@ -42,6 +46,14 @@ class Sample5_ARCoreViewModel(context: Context, val postOnUiThread: (Runnable) -
             }
         }
         updateStats()
+        viewModelScope.launch(Dispatchers.IO) {
+            val model = loadModel(
+                context.assets,
+                "3dmodels/LibertyStatue/LibertStatue.obj",
+                true
+            )
+            glRenderer.setStatueOfLibertyModel(model)
+        }
     }
 
     override fun onCleared() {

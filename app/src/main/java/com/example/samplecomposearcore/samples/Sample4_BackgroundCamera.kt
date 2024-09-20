@@ -19,14 +19,12 @@ import com.example.samplecomposearcore.compose.GLThreadedRenderer
 import com.example.samplecomposearcore.compose.OpenGLView
 import com.example.samplecomposearcore.geometry.Generator
 import com.example.samplecomposearcore.math.Vector3
-import com.example.samplecomposearcore.opengl.GPUTexture
+import com.example.samplecomposearcore.opengl.MaterialTextured
 import com.example.samplecomposearcore.opengl.RenderableMesh
-import com.example.samplecomposearcore.opengl.ShaderProgram
+import com.example.samplecomposearcore.opengl.RenderableModel
 import com.example.samplecomposearcore.opengl.glHasError
 import com.example.samplecomposearcore.scene.Camera3D
 import com.example.samplecomposearcore.scene.DeltaTime
-import com.example.samplecomposearcore.utils.ShaderReader
-import com.example.samplecomposearcore.utils.loadImage
 import com.google.ar.core.Frame
 
 
@@ -68,15 +66,12 @@ private class Sample4Renderer(context: Context) : GLThreadedRenderer() {
     private val deltaTime = DeltaTime()
     private val arCoreManager = ARCoreManager(context, onArCoreSessionCreated = {})
 
-    private val zoyaCubeRenderable = RenderableMesh().apply {
-        setMesh(Generator.generateCube(1.0f))
-    }
-    private val zoyaCubeShader = ShaderProgram(
-        ShaderReader.readShader(context, "shaders/sample.vert"),
-        ShaderReader.readShader(context, "shaders/sample.frag")
+    private val cuteCatCubeZoya: RenderableModel = RenderableModel(
+        RenderableMesh().apply {
+            setMesh(Generator.generateCube(1.0f))
+        },
+        MaterialTextured(context.assets, "textures/Zoya.png")
     )
-    private val zoyaCubeBitmap = loadImage(context.assets, "textures/Zoya.png", true)
-    private lateinit var zoyaCubeGpuTexture: GPUTexture
 
     private val zoyaCubeNode = RotatingNode().apply {
         localPosition = Vector3.forward().scaled(1.0f)
@@ -102,21 +97,7 @@ private class Sample4Renderer(context: Context) : GLThreadedRenderer() {
     override fun onThreadedInitializeGPUData() {
         glHasError("initializeGPUData start")
         arCoreManager.initializeGPU()
-        zoyaCubeShader.compile()
-        zoyaCubeRenderable.initializeGPU()
-        zoyaCubeRenderable.uploadToGPU()
-        zoyaCubeGpuTexture = GPUTexture(
-            GLES30.GL_TEXTURE_2D,
-            listOf(
-                GLES30.GL_TEXTURE_MIN_FILTER to GLES30.GL_NEAREST,
-                GLES30.GL_TEXTURE_MAG_FILTER to GLES30.GL_NEAREST,
-                GLES30.GL_TEXTURE_WRAP_S to GLES30.GL_CLAMP_TO_EDGE,
-                GLES30.GL_TEXTURE_WRAP_T to GLES30.GL_CLAMP_TO_EDGE,
-            )
-        )
-        zoyaCubeGpuTexture.uploadBitmapToGPU(GLES30.GL_RGBA, zoyaCubeBitmap)
-        zoyaCubeShader.use()
-        zoyaCubeShader.setTextureSampler2D("uColorTexture", 0)
+        cuteCatCubeZoya.initializeGPU()
         glHasError("initializeGPUData end")
     }
 
@@ -164,14 +145,7 @@ private class Sample4Renderer(context: Context) : GLThreadedRenderer() {
         GLES30.glDepthMask(true)
 
         // Render our virtual object
-        zoyaCubeShader.use()
-        zoyaCubeShader.setMatrixUniform("uModelMatrix", zoyaCubeNode.worldModelMatrix)
-        zoyaCubeShader.setMatrixUniform("uViewMatrix", camera3D.viewMatrix)
-        zoyaCubeShader.setMatrixUniform("uProjectionMatrix", camera3D.projectionMatrix)
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
-        GLES30.glBindTexture(zoyaCubeGpuTexture.target, zoyaCubeGpuTexture.id)
-        zoyaCubeRenderable.render()
-        GLES30.glBindTexture(zoyaCubeGpuTexture.target, 0)
+        cuteCatCubeZoya.renderNode(zoyaCubeNode, camera3D)
     }
 
     private fun updateCameraPosition(frame: Frame) {

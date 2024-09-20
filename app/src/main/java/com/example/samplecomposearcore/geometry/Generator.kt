@@ -69,10 +69,10 @@ object Generator {
 
         // Front face
         vertices.addAll(listOf(
-            Vertex.Builder().position(-halfWidth, -halfHeight, +halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(0.0f, 0.0f).build(),
-            Vertex.Builder().position(+halfWidth, -halfHeight, +halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(1.0f, 0.0f).build(),
-            Vertex.Builder().position(+halfWidth, +halfHeight, +halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(1.0f, 1.0f).build(),
-            Vertex.Builder().position(-halfWidth, +halfHeight, +halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(0.0f, 1.0f).build()
+            Vertex.Builder().position(-halfWidth, -halfHeight, +halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(0.0f, 0.0f).build(),
+            Vertex.Builder().position(+halfWidth, -halfHeight, +halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(1.0f, 0.0f).build(),
+            Vertex.Builder().position(+halfWidth, +halfHeight, +halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(1.0f, 1.0f).build(),
+            Vertex.Builder().position(-halfWidth, +halfHeight, +halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(0.0f, 1.0f).build()
         ))
         indices.addAll(listOf(
             0, 1, 2,
@@ -93,10 +93,10 @@ object Generator {
 
         // Back face
         vertices.addAll(listOf(
-            Vertex.Builder().position(+halfWidth, -halfHeight, -halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(0.0f, 0.0f).build(),
-            Vertex.Builder().position(-halfWidth, -halfHeight, -halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(1.0f, 0.0f).build(),
-            Vertex.Builder().position(-halfWidth, +halfHeight, -halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(1.0f, 1.0f).build(),
-            Vertex.Builder().position(+halfWidth, +halfHeight, -halfDepth).normal(0.0f, 0.0f, 1.0f).texCoords(0.0f, 1.0f).build()
+            Vertex.Builder().position(+halfWidth, -halfHeight, -halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(0.0f, 0.0f).build(),
+            Vertex.Builder().position(-halfWidth, -halfHeight, -halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(1.0f, 0.0f).build(),
+            Vertex.Builder().position(-halfWidth, +halfHeight, -halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(1.0f, 1.0f).build(),
+            Vertex.Builder().position(+halfWidth, +halfHeight, -halfDepth).normal(0.0f, 0.0f, -1.0f).texCoords(0.0f, 1.0f).build()
         ))
         indices.addAll(listOf(
             8, 9, 10,

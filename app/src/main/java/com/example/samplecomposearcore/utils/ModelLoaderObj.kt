@@ -22,7 +22,7 @@ import java.nio.FloatBuffer
 
 private const val TAG = "ModelReaderObj"
 
-fun loadModel(assetManager: AssetManager, filename: String): RenderableModel {
+fun loadModel(assetManager: AssetManager, filename: String, enableLighting: Boolean): RenderableModel {
     val file = File(filename)
     Logger.LogInfo(TAG, "Loading model \"$filename\"")
     val folderPath = file.parent!!
@@ -31,7 +31,7 @@ fun loadModel(assetManager: AssetManager, filename: String): RenderableModel {
 
     val rawObj = ObjReader.read(objInputStream)
     val mtlfile = rawObj.mtlFileNames[0]
-    val mapMaterials: Map<String, Material> = processMtlFile(assetManager, folderPath, mtlfile)
+    val mapMaterials: Map<String, Material> = processMtlFile(assetManager, folderPath, mtlfile, enableLighting)
     ObjSplitting.splitByMaterialGroups(rawObj).forEach { it: Map.Entry<String, Obj> ->
         Logger.LogInfo(TAG, "\t\tFound mesh with material:\"${it.key}\"")
         val mtlName = it.key
@@ -56,7 +56,8 @@ fun loadModel(assetManager: AssetManager, filename: String): RenderableModel {
 private fun processMtlFile(
     assetManager: AssetManager,
     folderPath: String,
-    mtlFilename: String
+    mtlFilename: String,
+    enableLighting: Boolean
 ): Map<String, Material> {
     val map = mutableMapOf<String, Material>()
     val mtlInputStream = assetManager.open("$folderPath/$mtlFilename")
@@ -78,6 +79,7 @@ private fun processMtlFile(
                 diffuseTextureFullPath
             )
         }
+        material.useLighting(enableLighting)
         map["$mtlFilename/${it.name}"] = material
     }
     mtlInputStream.close()

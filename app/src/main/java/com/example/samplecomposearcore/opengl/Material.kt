@@ -12,4 +12,5 @@ interface Material {
         viewMatrix: Matrix,
         projectionMatrix: Matrix
     )
+    fun useLighting(useLighting: Boolean)
 }

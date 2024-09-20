@@ -13,16 +13,15 @@ import com.example.samplecomposearcore.geometry.Generator
 import com.example.samplecomposearcore.math.Vector3
 import com.example.samplecomposearcore.opengl.Framebuffer
 import com.example.samplecomposearcore.opengl.GPUTexture
+import com.example.samplecomposearcore.opengl.MaterialTextured
 import com.example.samplecomposearcore.opengl.RenderableMesh
-import com.example.samplecomposearcore.opengl.ShaderProgram
+import com.example.samplecomposearcore.opengl.RenderableModel
 import com.example.samplecomposearcore.opengl.glHasError
 import com.example.samplecomposearcore.renderer.SceneOcclusionQuadRenderer
 import com.example.samplecomposearcore.scene.Camera3D
 import com.example.samplecomposearcore.scene.DeltaTime
 import com.example.samplecomposearcore.scene.Node
 import com.example.samplecomposearcore.utils.Logger
-import com.example.samplecomposearcore.utils.ShaderReader
-import com.example.samplecomposearcore.utils.loadImage
 import com.google.ar.core.DepthPoint
 import com.google.ar.core.Plane
 import com.google.ar.core.Point
@@ -62,28 +61,33 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         depthAsReadableTexture = false
     )
 
-    private val zoyaCubeRenderable = RenderableMesh().apply {
-        setMesh(Generator.generateCube(0.5f))
-    }
-    private val zoyaCubeShader = ShaderProgram(
-        ShaderReader.readShader(context, "shaders/sample.vert"),
-        ShaderReader.readShader(context, "shaders/sample.frag")
+    private val cuteCatCubeZoya: RenderableModel = RenderableModel(
+        RenderableMesh().apply {
+            setMesh(Generator.generateCube(1.0f))
+        },
+        MaterialTextured(context.assets, "textures/Zoya.png")
     )
-    private val zoyaCubeBitmap = loadImage(context.assets, "textures/Zoya.png", true)
-    private lateinit var zoyaCubeGpuTexture: GPUTexture
-    private val zoyaNode = RotatingNode().apply {
-        localPosition = Vector3.forward().scaled(1f)
-        localScale = Vector3.one().scaled(0.3f)
-
-        val childrenScale = 0.5f
-        addChild(RotatingNode().apply {
-            localPosition = Vector3.right().scaled(1f)
-            localScale = Vector3(childrenScale)
-        })
-    }
+    private val cuteCatCubeMerlot: RenderableModel = RenderableModel(
+        RenderableMesh().apply {
+            setMesh(Generator.generateCube(1.0f))
+        },
+        MaterialTextured(context.assets, "textures/Merlot.jpg")
+    )
+    private lateinit var statueOfLiberty: RenderableModel
 
     private val rootNode = Node().apply {
-        addChild(zoyaNode)
+        addChild(RotatingNode().apply {
+            localPosition = Vector3.forward().scaled(1f)
+            localScale = Vector3.one().scaled(0.3f)
+            renderableModel = cuteCatCubeZoya
+
+            val childrenScale = 0.5f
+            addChild(RotatingNode().apply {
+                localPosition = Vector3.right().scaled(1f)
+                localScale = Vector3(childrenScale)
+                renderableModel = cuteCatCubeMerlot
+            })
+        })
     }
 
     private var addedNodes = ArrayDeque<Node>()
@@ -113,9 +117,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
                          */
                         Logger.LogInfo(TAG, "HitResult using trackableType:${trackable::class.simpleName}")
                         val anchorNode = AnchorNode(hitResult.createAnchor())
-                        anchorNode.addChild(RotatingNode().apply {
-                            localScale = Vector3(0.5f)
-                        })
+                        anchorNode.addChild(createNewNodeObject())
                         addedNodes.add(anchorNode)
                         rootNode.addChild(anchorNode)
                         break
@@ -128,6 +130,10 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
 
     init {
         Logger.LogInfo(TAG, "MyRenderer init")
+    }
+
+    fun setStatueOfLibertyModel(renderableModel: RenderableModel) {
+        statueOfLiberty = renderableModel
     }
 
     override fun onViewLifecycleResume() {
@@ -146,6 +152,11 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
          */
         arCoreManager.onPause()
         deltaTime.pause()
+        cuteCatCubeZoya.restoreInitializedGPU()
+        cuteCatCubeMerlot.restoreInitializedGPU()
+        if (::statueOfLiberty.isInitialized) {
+            statueOfLiberty.restoreInitializedGPU()
+        }
     }
 
     fun onClear() {
@@ -188,21 +199,8 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         Logger.LogInfo(TAG, "MyRenderer onThreadedInitializeGPUData")
         glHasError("initializeGPUData start")
 
-        zoyaCubeShader.compile()
-        zoyaCubeRenderable.initializeGPU()
-        zoyaCubeRenderable.uploadToGPU()
-        zoyaCubeGpuTexture = GPUTexture(
-            GLES30.GL_TEXTURE_2D,
-            listOf(
-                GLES30.GL_TEXTURE_MIN_FILTER to GLES30.GL_NEAREST,
-                GLES30.GL_TEXTURE_MAG_FILTER to GLES30.GL_NEAREST,
-                GLES30.GL_TEXTURE_WRAP_S to GLES30.GL_CLAMP_TO_EDGE,
-                GLES30.GL_TEXTURE_WRAP_T to GLES30.GL_CLAMP_TO_EDGE,
-            )
-        )
-        zoyaCubeGpuTexture.uploadBitmapToGPU(GLES30.GL_RGBA, zoyaCubeBitmap)
-        zoyaCubeShader.use()
-        zoyaCubeShader.setTextureSampler2D("uColorTexture", 0)
+        cuteCatCubeZoya.initializeGPU()
+        cuteCatCubeMerlot.initializeGPU()
         glHasError("initializeGPUData after zoyaCube initialized")
 
         arCoreManager.initializeGPU()
@@ -264,6 +262,11 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         rootNode.traverseEnabledTree {
             it.update(deltaTime.deltaTimeSeconds)
         }
+        if (::statueOfLiberty.isInitialized) {
+            if (!statueOfLiberty.isGPUInitialized()) {
+                statueOfLiberty.initializeGPU()
+            }
+        }
     }
 
     private fun render() {
@@ -317,9 +320,7 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         // Simple & naive render pass. Might cause overdraw,
         // transparencies won't work correctly.
         rootNode.traverseEnabledTree {
-            if (it is RotatingNode) {
-                renderZoyaCube(it)
-            }
+            it.renderableModel?.renderNode(it, camera3D)
         }
         if (showFeaturePoints) {
             // By rendering the pointCloud after the virtual objects,
@@ -330,16 +331,33 @@ class Sample5_ARCoreRenderer(context: Context, onArCoreSessionCreated: () -> Uni
         }
     }
 
-    private fun renderZoyaCube(node: Node) {
-        zoyaCubeShader.use()
-        zoyaCubeShader.setMatrixUniform("uModelMatrix", node.worldModelMatrix)
-        zoyaCubeShader.setMatrixUniform("uViewMatrix", camera3D.viewMatrix)
-        zoyaCubeShader.setMatrixUniform("uProjectionMatrix", camera3D.projectionMatrix)
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
-        GLES30.glBindTexture(zoyaCubeGpuTexture.target, zoyaCubeGpuTexture.id)
-        zoyaCubeRenderable.render()
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
-        GLES30.glBindTexture(zoyaCubeGpuTexture.target, 0)
+    private enum class ObjectTypes {
+        CuteCatCubeZoya,
+        CuteCatCubeMerlot,
+        StatueOfLiberty
+    }
+    private var nextObjectType = ObjectTypes.CuteCatCubeZoya
+
+    private fun createNewNodeObject(): Node {
+        val currentObjectType = nextObjectType
+        nextObjectType = when (nextObjectType) {
+            ObjectTypes.CuteCatCubeZoya -> ObjectTypes.CuteCatCubeMerlot
+            ObjectTypes.CuteCatCubeMerlot -> ObjectTypes.StatueOfLiberty
+            ObjectTypes.StatueOfLiberty -> ObjectTypes.CuteCatCubeZoya
+        }
+        return when (currentObjectType) {
+            ObjectTypes.CuteCatCubeZoya -> RotatingNode().apply {
+                localScale = Vector3(0.5f)
+                renderableModel = cuteCatCubeZoya
+            }
+            ObjectTypes.CuteCatCubeMerlot -> RotatingNode().apply {
+                localScale = Vector3(0.5f)
+                renderableModel = cuteCatCubeMerlot
+            }
+            ObjectTypes.StatueOfLiberty -> Node().apply {
+                renderableModel = statueOfLiberty
+            }
+        }
     }
 
     companion object {

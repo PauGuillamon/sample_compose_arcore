@@ -22,6 +22,8 @@ class MaterialTextured(
 
     private var initialized = false
 
+    private var useLighting: Boolean = false
+
     override fun initializeGPU() {
         if (initialized) {
             return
@@ -52,6 +54,7 @@ class MaterialTextured(
 
     override fun prepareForRender() {
         shader.use()
+        shader.setBoolUniform("uUseLighting", useLighting)
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(gpuTexture.target, gpuTexture.id)
     }
@@ -64,5 +67,9 @@ class MaterialTextured(
         shader.setMatrixUniform("uModelMatrix", modelMatrix)
         shader.setMatrixUniform("uViewMatrix", viewMatrix)
         shader.setMatrixUniform("uProjectionMatrix", projectionMatrix)
+    }
+
+    override fun useLighting(useLighting: Boolean) {
+        this.useLighting = useLighting
     }
 }

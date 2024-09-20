@@ -4,6 +4,7 @@ import androidx.annotation.CallSuper
 import com.example.samplecomposearcore.math.Matrix
 import com.example.samplecomposearcore.math.Quaternion
 import com.example.samplecomposearcore.math.Vector3
+import com.example.samplecomposearcore.opengl.RenderableModel
 
 open class Node {
     private val localModelMatrix = Matrix()
@@ -34,6 +35,8 @@ open class Node {
         }
 
     var enabled = true
+
+    var renderableModel: RenderableModel? = null
 
     protected var parent: Node? = null
     protected val children = mutableListOf<Node>()

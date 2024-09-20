@@ -105,11 +105,17 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
 
     private val deltaTime = DeltaTime()
 
-    private val cuteCatCubeModel = RenderableModel(
+    private val cuteCatCubeZoya = RenderableModel(
         RenderableMesh().apply {
             setMesh(Generator.generateCube(1.0f))
         },
         MaterialTextured(context.assets, "textures/Zoya.png")
+    )
+    private val cuteCatCubeMerlot = RenderableModel(
+        RenderableMesh().apply {
+            setMesh(Generator.generateCube(1.0f))
+        },
+        MaterialTextured(context.assets, "textures/Merlot.jpg")
     )
 
     private val nodes = listOf(
@@ -145,12 +151,14 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
     }
 
     override fun onViewLifecyclePause() {
-        cuteCatCubeModel.restoreInitializedGPU()
+        cuteCatCubeZoya.restoreInitializedGPU()
+        cuteCatCubeMerlot.restoreInitializedGPU()
     }
 
     override fun onThreadedInitializeGPUData() {
         glHasError("initializeGPUData start")
-        cuteCatCubeModel.initializeGPU()
+        cuteCatCubeZoya.initializeGPU()
+        cuteCatCubeMerlot.initializeGPU()
         glHasError("initializeGPUData end")
     }
 
@@ -184,8 +192,16 @@ private class Sample3Renderer(context: Context) : GLThreadedRenderer() {
         GLES30.glEnable(GLES30.GL_DEPTH_TEST)
         GLES30.glDepthMask(true)
 
+        var count = 0
         nodes.forEach {
-            cuteCatCubeModel.renderNode(it, camera3D)
+            // Rendering each node with a different model
+            val renderableModel = if (count % 2 == 0) {
+                cuteCatCubeZoya
+            } else {
+                cuteCatCubeMerlot
+            }
+            renderableModel.renderNode(it, camera3D)
+            count++
         }
     }
 

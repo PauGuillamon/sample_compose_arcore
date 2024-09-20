@@ -15,6 +15,7 @@ class MaterialColored(
     )
 
     private var initialized = false
+    private var useLighting = false
 
     override fun initializeGPU() {
         if (initialized) {
@@ -35,6 +36,7 @@ class MaterialColored(
     override fun prepareForRender() {
         shader.use()
         shader.setVector3Uniform("uColor", color)
+        shader.setBoolUniform("uUseLighting", useLighting)
     }
 
     override fun setRenderProperties(
@@ -45,5 +47,9 @@ class MaterialColored(
         shader.setMatrixUniform("uModelMatrix", modelMatrix)
         shader.setMatrixUniform("uViewMatrix", viewMatrix)
         shader.setMatrixUniform("uProjectionMatrix", projectionMatrix)
+    }
+
+    override fun useLighting(useLighting: Boolean) {
+        this.useLighting = useLighting
     }
 }
