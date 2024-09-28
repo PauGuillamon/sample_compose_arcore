@@ -4,7 +4,9 @@ This project contains an AR Android application that showcases how to combine Co
 
 The different samples build up from a basic OpenGL view with compose, to a full AR experience with ARCore and OpenGL ES.
 
-This project was created for my "Building an AR app with Compose & OpenGL ES" talk for Droidcon Berlin 2024.
+This project was created for my "Building an AR app with Compose & OpenGL ES" talk for Droidcon Berlin 2024 and Droidcon NewYork 2024. The recordings can be found in:
+- Droidcon Berlin 2024: https://www.droidcon.com/2024/08/30/building-an-ar-app-with-compose-opengl-es/
+- Droidcon New York 2024: to be published
 
 # Features
 
